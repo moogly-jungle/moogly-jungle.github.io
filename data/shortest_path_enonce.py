@@ -105,6 +105,11 @@ print(dijkstra(g3, 'A', 'G'))
 
 # EXERCICE: définir le graphe utilisé dans la vidéo.
 
+# EXERCICE: en utilisant dijkstra, écrire une stratégie pour résoudre le jeu 
+# de la séance précédente.
+# - à partir du labyrinthe, construisez un graphe, puis trouvez un plus court 
+# chemin vers le 'X' est faite le suivre par le hero.
+
 #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 g4 = None
 
