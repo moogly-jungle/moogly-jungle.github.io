@@ -340,7 +340,7 @@ footer{
       </div>
 
       <div class="toggles">
-        <label class="tog"><input type="checkbox" id="cbStair" checked><span>Escalier du coefficient directeur</span></label>
+        <label class="tog"><input type="checkbox" id="cbStair" checked><span>Triangle du coefficient directeur</span></label>
         <label class="tog"><input type="checkbox" id="cbRef" checked><span class="swatch"></span><span>Droite <span class="math"><i>y</i> = <i>m x</i></span> et translation</span></label>
       </div>
 
@@ -555,23 +555,19 @@ footer{
 
   function drawStairs(){
     if (!cbStair.checked) return;
+    var y0 = p, y1 = p + m;
     ctx.save();
+    ctx.globalAlpha = .12; ctx.fillStyle = T.alpha;
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(y0)); ctx.lineTo(px(1), py(y0)); ctx.lineTo(px(1), py(y1));
+    ctx.closePath(); ctx.fill();
+    ctx.globalAlpha = 1;
     ctx.strokeStyle = T.alpha; ctx.lineWidth = 1.8; ctx.lineJoin = "round";
-    for (var k = 0; k < 3; k++){
-      var y0 = p + k * m, y1 = p + (k + 1) * m;
-      if (k === 0){
-        ctx.globalAlpha = .12; ctx.fillStyle = T.alpha;
-        ctx.beginPath();
-        ctx.moveTo(px(0), py(y0)); ctx.lineTo(px(1), py(y0)); ctx.lineTo(px(1), py(y1));
-        ctx.closePath(); ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-      ctx.beginPath();
-      ctx.moveTo(px(k), py(y0));
-      ctx.lineTo(px(k + 1), py(y0));
-      ctx.lineTo(px(k + 1), py(y1));
-      ctx.stroke();
-    }
+    ctx.beginPath();
+    ctx.moveTo(px(0), py(y0));
+    ctx.lineTo(px(1), py(y0));
+    ctx.lineTo(px(1), py(y1));
+    ctx.stroke();
     ctx.restore();
     label("+1", px(0.5), py(p) + 7, T.alpha, "center", "top");
     if (m !== 0){
