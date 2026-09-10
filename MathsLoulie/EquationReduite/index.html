@@ -142,7 +142,7 @@ h1{
   height:clamp(380px,56vh,540px);
   overflow:hidden;
 }
-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+canvas{display:block;width:100%;height:100%;touch-action:none}
 .hint{
   position:absolute;left:12px;bottom:10px;
   font-size:11px;color:var(--muted);
@@ -298,7 +298,7 @@ footer{
       <div class="eyebrow"><a href="../">Les mathématiques pour Loulie</a></div>
       <h1>Équation réduite d'une droite</h1>
     </div>
-    <p>Tirez le point <span class="math"><i>A</i></span> pour régler <span class="math"><i>p</i></span>, le point <span class="math"><i>B</i></span> pour régler <span class="math"><i>m</i></span> — ou servez-vous des curseurs.</p>
+    <p>Réglez <span class="math"><i>m</i></span> et <span class="math"><i>p</i></span> avec les curseurs : la droite, le triangle et les lectures suivent.</p>
   </div>
 
   <div class="formulas">
@@ -372,8 +372,8 @@ footer{
   </div>
 
   <footer>
-    Repère orthonormé. La droite passe par <span class="math"><i>A</i>&#8202;(0&#8202;;&#8202;<i>p</i>)</span> et
-    <span class="math"><i>B</i>&#8202;(1&#8202;;&#8202;<i>p</i> + <i>m</i>)</span> : d'un point au suivant on avance de 1 et on monte de <span class="math"><i>m</i></span>.
+    Repère orthonormé. La droite coupe l'axe des ordonnées en <span class="math"><i>p</i></span>, et quand
+    <span class="math"><i>x</i></span> augmente de 1, <span class="math"><i>y</i></span> augmente de <span class="math"><i>m</i></span> — c'est ce que montre le triangle.
     C'est la droite <span class="math"><i>y</i> = <i>m x</i></span> translatée verticalement de <span class="math"><i>p</i></span>.
   </footer>
 
@@ -546,13 +546,6 @@ footer{
     ctx.fillText(text, x, y);
   }
 
-  function dot(x, y, color){
-    ctx.fillStyle = color;
-    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, 6.284); ctx.fill();
-    ctx.strokeStyle = T.surface; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, 6.284); ctx.stroke();
-  }
-
   function drawStairs(){
     if (!cbStair.checked) return;
     var y0 = p, y1 = p + m;
@@ -596,11 +589,6 @@ footer{
       ctx.beginPath(); ctx.arc(px(z), py(0), 4.5, 0, 6.284); ctx.fill(); ctx.stroke();
     }
 
-    dot(px(0), py(p), T.beta);
-    label("A (0 ; " + fmt(p) + ")", px(0) - 10, py(p) + (m >= 0 ? 12 : -12), T.beta, "right", m >= 0 ? "top" : "bottom");
-
-    dot(px(1), py(p + m), T.alpha);
-    label("B (1 ; " + fmt(p + m) + ")", px(1) + 10, py(p + m) + (m >= 0 ? -12 : 12), T.alpha, "left", m >= 0 ? "bottom" : "top");
   }
 
   /* ---------- lecture ---------- */
@@ -614,7 +602,7 @@ footer{
     document.getElementById("rM").innerHTML =
       "<i>m</i> = <span class='k-m'>" + fmt(m) + "</span> <span class='u'>(" + sens + ")</span>";
     document.getElementById("rP").innerHTML =
-      "<i>p</i> = <span class='k-p'>" + fmt(p) + "</span> <span class='u'>· A (0 ; " + fmt(p) + ")</span>";
+      "<i>p</i> = <span class='k-p'>" + fmt(p) + "</span> <span class='u'>· (0 ; " + fmt(p) + ")</span>";
 
     document.getElementById("rAcc").innerHTML = (m === 0)
       ? "<span class='u'>y ne change pas</span>"
@@ -643,32 +631,6 @@ footer{
     slM.value = DEF.m; slP.value = DEF.p; zoom = 1; pull();
   });
 
-  var dragging = null;
-  function hit(e, x, y){
-    var r = cv.getBoundingClientRect();
-    return Math.hypot(e.clientX - r.left - px(x), e.clientY - r.top - py(y)) < 16;
-  }
-  cv.addEventListener("pointermove", function(e){
-    if (!dragging){
-      cv.style.cursor = (hit(e, 0, p) || hit(e, 1, p + m)) ? "ns-resize" : "crosshair";
-      return;
-    }
-    var r = cv.getBoundingClientRect();
-    var yv = round1((oy - (e.clientY - r.top)) / scale);
-    if (dragging === "A") slP.value = clamp(yv, -10, 10);
-    else slM.value = clamp(round1(yv - p), -5, 5);
-    pull();
-  });
-  cv.addEventListener("pointerdown", function(e){
-    if (hit(e, 0, p)) dragging = "A";
-    else if (hit(e, 1, p + m)) dragging = "B";
-    else return;
-    cv.setPointerCapture(e.pointerId);
-    cv.style.cursor = "ns-resize";
-    e.preventDefault();
-  });
-  cv.addEventListener("pointerup", function(){ dragging = null; });
-  cv.addEventListener("pointercancel", function(){ dragging = null; });
 
   cv.addEventListener("wheel", function(e){
     e.preventDefault();
