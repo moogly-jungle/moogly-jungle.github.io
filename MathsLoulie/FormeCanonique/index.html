@@ -247,7 +247,17 @@ footer{
 }
 
 @media (max-width:880px){
-  .stage{grid-template-columns:1fr}
+  /* Empilé : le graphique d'abord, puis la formule, puis les curseurs.
+     display:contents dissout la grille de .stage pour que .plot et .panel
+     deviennent des éléments directs de .wrap, seuls réordonnables entre eux. */
+  .stage{display:contents}
+  .head{order:1}
+  .plot{order:2}
+  .formulas{order:3}
+  .warn{order:4}
+  .panel{order:5}
+  .readout{order:6}
+  footer{order:7}
   .formulas{grid-template-columns:1fr}
   .fblock + .fblock{border-left:none;border-top:1px solid var(--rule)}
   .eq{font-size:25px}
