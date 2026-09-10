@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Forme canonique du second degré : la parabole P(x) = a(x−α)² + β, pilotée par trois curseurs.">
+<title>Les mathématiques pour Loulie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --paper:#FAF9F5;
+  --surface:#FFFFFF;
+  --ink:#1A1C2B;
+  --muted:#5C6076;
+  --rule:#E4E1D8;
+  --grid:#DDDFF0;
+  --grid-strong:#BCC0E0;
+  --curve:#2A3F9D;
+  --alpha:#C1443C;
+  --beta:#16786A;
+  --ref:#A7A9BC;
+  --vec:#7A6FA8;
+  --warn-bg:#FBEEE6;
+  --warn-ink:#8A4A18;
+  --shadow:0 1px 2px rgba(26,28,43,.06), 0 8px 24px -14px rgba(26,28,43,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131520;
+    --surface:#1A1D2A;
+    --ink:#E9EAF1;
+    --muted:#9BA0B6;
+    --rule:#2B2F40;
+    --grid:#262A44;
+    --grid-strong:#3A3F66;
+    --curve:#93A8FF;
+    --alpha:#EC7A70;
+    --beta:#4FC3AC;
+    --ref:#5A5F78;
+    --vec:#A99AE0;
+    --warn-bg:#2E2216;
+    --warn-ink:#E9B486;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131520;
+  --surface:#1A1D2A;
+  --ink:#E9EAF1;
+  --muted:#9BA0B6;
+  --rule:#2B2F40;
+  --grid:#262A44;
+  --grid-strong:#3A3F66;
+  --curve:#93A8FF;
+  --alpha:#EC7A70;
+  --beta:#4FC3AC;
+  --ref:#5A5F78;
+  --vec:#A99AE0;
+  --warn-bg:#2E2216;
+  --warn-ink:#E9B486;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:28px 24px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+}
+
+/* ---------- en-tête ---------- */
+.head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.eyebrow{
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--alpha);font-weight:600;
+}
+h1{
+  font-family:"Newsreader",Georgia,serif;
+  font-weight:500;font-size:30px;line-height:1.1;margin:0;
+  text-wrap:balance;letter-spacing:-.01em;
+}
+.head p{margin:0;color:var(--muted);font-size:13.5px}
+
+/* ---------- formules ---------- */
+.formulas{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-columns:1.35fr 1fr;
+}
+.fblock{padding:18px 24px;min-width:0;overflow-x:auto}
+.fblock + .fblock{border-left:1px solid var(--rule)}
+.flabel{
+  font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin-bottom:6px;
+}
+.math{
+  font-family:"Newsreader",Georgia,serif;
+  white-space:nowrap;
+  font-variant-numeric:lining-nums;
+}
+.math i{font-style:italic}
+.math .op{padding:0 .12em}
+.math sup{font-size:.62em;vertical-align:.52em;line-height:0}
+.eq{font-size:30px;line-height:1.25}
+.eq-alt{font-size:23px;line-height:1.3;color:var(--muted)}
+.k-a{color:var(--curve)}
+.k-al{color:var(--alpha)}
+.k-be{color:var(--beta)}
+
+/* ---------- scène ---------- */
+.stage{
+  display:grid;
+  grid-template-columns:1fr 292px;
+  gap:22px;
+  align-items:start;
+}
+.plot{
+  position:relative;
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  height:clamp(380px,56vh,540px);
+  overflow:hidden;
+}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.hint{
+  position:absolute;left:12px;bottom:10px;
+  font-size:11px;color:var(--muted);
+  background:color-mix(in srgb, var(--surface) 82%, transparent);
+  padding:3px 8px;border-radius:5px;pointer-events:none;
+}
+
+/* ---------- réglages ---------- */
+.panel{display:flex;flex-direction:column;gap:4px}
+.param{padding:13px 0;border-bottom:1px solid var(--rule)}
+.param:first-child{padding-top:0}
+.prow{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.psym{
+  font-family:"Newsreader",Georgia,serif;font-style:italic;
+  font-size:21px;line-height:1;
+}
+.pname{font-size:12px;color:var(--muted);flex:1}
+.pval{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:14.5px;font-weight:500;font-variant-numeric:tabular-nums;
+  min-width:4.2em;text-align:right;
+}
+.prange{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:10.5px;color:var(--muted);
+  display:flex;justify-content:space-between;margin-top:2px;
+}
+.p-a .psym,.p-a .pval{color:var(--curve)}
+.p-al .psym,.p-al .pval{color:var(--alpha)}
+.p-be .psym,.p-be .pval{color:var(--beta)}
+
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:22px;margin:4px 0 0;background:transparent;display:block;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:3px;border-radius:2px;background:var(--rule);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:17px;height:17px;border-radius:50%;
+  background:var(--sl);border:2.5px solid var(--surface);margin-top:-7px;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:grab;
+}
+input[type="range"]::-moz-range-track{
+  height:3px;border-radius:2px;background:var(--rule);
+}
+input[type="range"]::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--sl);border:2.5px solid var(--surface);
+  box-shadow:0 1px 3px rgba(0,0,0,.3);cursor:grab;
+}
+input[type="range"]:focus{outline:none}
+input[type="range"]:focus-visible{outline:2px solid var(--sl);outline-offset:3px;border-radius:6px}
+.p-a input{--sl:var(--curve)}
+.p-al input{--sl:var(--alpha)}
+.p-be input{--sl:var(--beta)}
+
+.toggles{display:flex;flex-direction:column;gap:9px;padding-top:14px}
+.tog{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--muted);cursor:pointer}
+.tog input{accent-color:var(--curve);width:14px;height:14px;margin:0;cursor:pointer}
+.tog .swatch{width:15px;height:0;border-top:2px dashed var(--ref);flex:none}
+.reset{
+  margin-top:12px;align-self:flex-start;
+  font:inherit;font-size:12.5px;
+  background:transparent;color:var(--ink);
+  border:1px solid var(--rule);border-radius:6px;
+  padding:6px 13px;cursor:pointer;
+}
+.reset:hover{border-color:var(--muted)}
+.reset:focus-visible{outline:2px solid var(--curve);outline-offset:2px}
+
+/* ---------- lecture ---------- */
+.readout{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+  gap:0 26px;
+  border-top:1px solid var(--rule);
+  padding-top:16px;
+}
+.ritem{padding:6px 0}
+.ritem + .ritem{border-left:1px solid var(--rule);padding-left:26px;margin-left:-26px}
+.rlabel{
+  font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin-bottom:3px;
+}
+.rval{
+  font-family:"Newsreader",Georgia,serif;font-size:18px;line-height:1.35;
+}
+.rval .u{font-family:"IBM Plex Sans",sans-serif;font-size:14px;color:var(--muted)}
+
+.warn{
+  display:none;
+  background:var(--warn-bg);color:var(--warn-ink);
+  border-radius:7px;padding:9px 14px;font-size:13px;
+}
+.warn.on{display:block}
+.warn .math{font-size:15px}
+
+footer{
+  color:var(--muted);font-size:12px;
+  border-top:1px solid var(--rule);padding-top:14px;
+}
+
+@media (max-width:880px){
+  .stage{grid-template-columns:1fr}
+  .formulas{grid-template-columns:1fr}
+  .fblock + .fblock{border-left:none;border-top:1px solid var(--rule)}
+  .eq{font-size:25px}
+  .eq-alt{font-size:20px}
+  .ritem + .ritem{border-left:none;padding-left:0;margin-left:0}
+  .readout{gap:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+.eyebrow a{color:inherit;text-decoration:none}
+.eyebrow a:hover{text-decoration:underline}
+.eyebrow a:focus-visible{outline:2px solid var(--alpha);outline-offset:3px;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div>
+      <div class="eyebrow"><a href="../">Les mathématiques pour Loulie</a></div>
+      <h1>Forme canonique du second degré</h1>
+    </div>
+    <p>Déplacez les curseurs — ou tirez le sommet <span class="math"><i>S</i></span> directement sur le graphique.</p>
+  </div>
+
+  <div class="formulas">
+    <div class="fblock">
+      <div class="flabel">Forme canonique</div>
+      <div class="math eq" id="eqCanon"></div>
+    </div>
+    <div class="fblock">
+      <div class="flabel">Forme développée</div>
+      <div class="math eq-alt" id="eqDev"></div>
+    </div>
+  </div>
+
+  <div class="warn" id="warn">
+    <span class="math"><i>a</i> = 0</span> : ce n'est plus un trinôme du second degré. La courbe est la droite horizontale d'équation <span class="math"><i>y</i> = <i>β</i></span>.
+  </div>
+
+  <div class="stage">
+    <div class="plot">
+      <canvas id="board"></canvas>
+      <div class="hint">Molette : zoom &nbsp;·&nbsp; Double-clic : recadrer</div>
+    </div>
+
+    <div class="panel">
+      <div class="param p-a">
+        <div class="prow">
+          <span class="psym">a</span>
+          <span class="pname">ouverture et sens</span>
+          <span class="pval" id="valA"></span>
+        </div>
+        <input type="range" id="slA" min="-5" max="5" step="0.1" value="0.5" aria-label="Coefficient a">
+        <div class="prange"><span>−5</span><span>5</span></div>
+      </div>
+
+      <div class="param p-al">
+        <div class="prow">
+          <span class="psym">α</span>
+          <span class="pname">abscisse du sommet</span>
+          <span class="pval" id="valAl"></span>
+        </div>
+        <input type="range" id="slAl" min="-10" max="10" step="0.1" value="-3" aria-label="Paramètre alpha">
+        <div class="prange"><span>−10</span><span>10</span></div>
+      </div>
+
+      <div class="param p-be">
+        <div class="prow">
+          <span class="psym">β</span>
+          <span class="pname">ordonnée du sommet</span>
+          <span class="pval" id="valBe"></span>
+        </div>
+        <input type="range" id="slBe" min="-10" max="10" step="0.1" value="-4" aria-label="Paramètre bêta">
+        <div class="prange"><span>−10</span><span>10</span></div>
+      </div>
+
+      <div class="toggles">
+        <label class="tog"><input type="checkbox" id="cbRef" checked><span class="swatch"></span><span>Parabole <span class="math"><i>y</i> = <i>a x</i><sup>2</sup></span> et translation</span></label>
+        <label class="tog"><input type="checkbox" id="cbRoots" checked><span>Racines et axe de symétrie</span></label>
+      </div>
+
+      <button class="reset" id="reset" type="button">Réinitialiser</button>
+    </div>
+  </div>
+
+  <div class="readout">
+    <div class="ritem">
+      <div class="rlabel">Sommet</div>
+      <div class="rval math" id="rSommet"></div>
+    </div>
+    <div class="ritem">
+      <div class="rlabel">Axe de symétrie</div>
+      <div class="rval math" id="rAxe"></div>
+    </div>
+    <div class="ritem">
+      <div class="rlabel">Extremum</div>
+      <div class="rval math" id="rExt"></div>
+    </div>
+    <div class="ritem">
+      <div class="rlabel">Discriminant</div>
+      <div class="rval math" id="rDelta"></div>
+    </div>
+    <div class="ritem">
+      <div class="rlabel">Racines</div>
+      <div class="rval math" id="rRac"></div>
+    </div>
+  </div>
+
+  <footer>
+    Repère orthonormé. Les valeurs approchées sont arrondies au centième.
+    Le sommet <span class="math"><i>S</i></span> est l'image de l'origine par la translation de vecteur de coordonnées <span class="math">(<i>α</i>&#8202;;&#8202;<i>β</i>)</span>.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var cv = document.getElementById("board");
+  var ctx = cv.getContext("2d");
+  var slA = document.getElementById("slA"),
+      slAl = document.getElementById("slAl"),
+      slBe = document.getElementById("slBe"),
+      cbRef = document.getElementById("cbRef"),
+      cbRoots = document.getElementById("cbRoots");
+
+  var DEF = {a:0.5, al:-3, be:-4};
+  var a = DEF.a, al = DEF.al, be = DEF.be;
+  var zoom = 1;
+  var HALF = 12.5;           // demi-hauteur visible en unités, à zoom 1
+  var scale = 20, ox = 0, oy = 0;
+
+  /* ---------- nombres à la française ---------- */
+  function fmt(v, d){
+    d = (d === undefined) ? 2 : d;
+    if (Math.abs(v) < 5e-11) v = 0;
+    var s = v.toFixed(d);
+    if (s.indexOf(".") >= 0) s = s.replace(/0+$/, "").replace(/\.$/, "");
+    if (s === "-0") s = "0";
+    return s.replace(".", ",").replace("-", "−");
+  }
+  function round1(v){ return Math.round(v * 10) / 10; }
+
+  /* ---------- écriture des formules ---------- */
+  var X = "<i>x</i>";
+  function coef(v, cls){                    // coefficient devant un facteur
+    if (v === 1) return "";
+    if (v === -1) return "−";
+    return "<span class='" + cls + "'>" + fmt(v) + "</span>";
+  }
+  function signed(v, cls, factor){          // terme additionné, avec son signe
+    if (v === 0) return "";
+    var s = " <span class='op'>" + (v > 0 ? "+" : "−") + "</span> ";
+    var m = Math.abs(v);
+    if (factor && m === 1) return s + factor;
+    return s + "<span class='" + cls + "'>" + fmt(m) + "</span>" + (factor || "");
+  }
+
+  function canonHTML(){
+    if (a === 0) return "<i>P</i>(" + X + ") = " + (be === 0 ? "0" : "<span class='k-be'>" + fmt(be) + "</span>");
+    var body;
+    if (al === 0){
+      body = coef(a, "k-a") + X + "<sup>2</sup>";
+    } else {
+      var inner = X + " <span class='op'>" + (al > 0 ? "−" : "+") + "</span> <span class='k-al'>" + fmt(Math.abs(al)) + "</span>";
+      body = coef(a, "k-a") + "(" + inner + ")<sup>2</sup>";
+    }
+    return "<i>P</i>(" + X + ") = " + body + signed(be, "k-be", null);
+  }
+
+  function devHTML(){
+    var b = -2 * a * al, c = a * al * al + be;
+    if (a === 0){
+      var lin = (c === 0) ? "0" : fmt(c);
+      return "<i>P</i>(" + X + ") = " + lin;
+    }
+    var head = coef(a, "k-a") + X + "<sup>2</sup>";
+    return "<i>P</i>(" + X + ") = " + head + signed(round1e(b), "", X) + signed(round1e(c), "", null);
+  }
+  function round1e(v){ return Math.round(v * 1e6) / 1e6; }
+
+  /* ---------- jetons de couleur pour le canevas ---------- */
+  var T = {};
+  function readTokens(){
+    var cs = getComputedStyle(document.documentElement);
+    ["ink","muted","grid","grid-strong","curve","alpha","beta","ref","vec","surface"].forEach(function(k){
+      T[k] = cs.getPropertyValue("--" + k).trim();
+    });
+  }
+
+  /* ---------- dessin ---------- */
+  function px(x){ return ox + x * scale; }
+  function py(y){ return oy - y * scale; }
+
+  function resize(){
+    var w = cv.clientWidth, h = cv.clientHeight;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = Math.round(w * dpr), H = Math.round(h * dpr);
+    if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    scale = (h / (2 * HALF)) * zoom;
+    ox = w / 2; oy = h / 2;
+    return {w:w, h:h};
+  }
+
+  function drawGrid(w, h){
+    var x0 = Math.floor(-ox / scale), x1 = Math.ceil((w - ox) / scale);
+    var y0 = Math.floor(-(h - oy) / scale), y1 = Math.ceil(oy / scale);
+
+    if (scale >= 11){
+      ctx.strokeStyle = T.grid; ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (var i = x0; i <= x1; i++){ if (i % 5 === 0) continue;
+        var X0 = Math.round(px(i)) + .5; ctx.moveTo(X0, 0); ctx.lineTo(X0, h); }
+      for (var j = y0; j <= y1; j++){ if (j % 5 === 0) continue;
+        var Y0 = Math.round(py(j)) + .5; ctx.moveTo(0, Y0); ctx.lineTo(w, Y0); }
+      ctx.stroke();
+    }
+    ctx.strokeStyle = T["grid-strong"]; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (var i2 = x0; i2 <= x1; i2++){ if (i2 % 5) continue;
+      var X1 = Math.round(px(i2)) + .5; ctx.moveTo(X1, 0); ctx.lineTo(X1, h); }
+    for (var j2 = y0; j2 <= y1; j2++){ if (j2 % 5) continue;
+      var Y1 = Math.round(py(j2)) + .5; ctx.moveTo(0, Y1); ctx.lineTo(w, Y1); }
+    ctx.stroke();
+  }
+
+  function drawAxes(w, h){
+    var cx = Math.round(px(0)) + .5, cy = Math.round(py(0)) + .5;
+    ctx.strokeStyle = T.ink; ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+    ctx.moveTo(cx, h); ctx.lineTo(cx, 0);
+    ctx.stroke();
+
+    // pointes de flèches
+    ctx.fillStyle = T.ink;
+    ctx.beginPath(); ctx.moveTo(w - 1, cy); ctx.lineTo(w - 9, cy - 4); ctx.lineTo(w - 9, cy + 4); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(cx, 1); ctx.lineTo(cx - 4, 9); ctx.lineTo(cx + 4, 9); ctx.closePath(); ctx.fill();
+
+    // graduations
+    var step = scale >= 34 ? 1 : (scale >= 19 ? 2 : 5);
+    ctx.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+    ctx.fillStyle = T.muted;
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    var x0 = Math.ceil(-ox / scale / step) * step, x1 = (w - ox) / scale;
+    for (var i = x0; i <= x1; i += step){
+      if (i === 0) continue;
+      var X0 = Math.round(px(i)) + .5;
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(X0, cy - 3.5); ctx.lineTo(X0, cy + 3.5); ctx.stroke();
+      var ly = Math.min(Math.max(cy + 6, 2), h - 16);
+      ctx.fillText(fmt(i, 0), X0, ly);
+    }
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    var y0 = Math.ceil(-(h - oy) / scale / step) * step, y1 = oy / scale;
+    for (var j = y0; j <= y1; j += step){
+      if (j === 0) continue;
+      var Y0 = Math.round(py(j)) + .5;
+      ctx.strokeStyle = T.ink; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx - 3.5, Y0); ctx.lineTo(cx + 3.5, Y0); ctx.stroke();
+      var lx = Math.min(Math.max(cx - 7, 22), w - 4);
+      ctx.fillText(fmt(j, 0), lx, Y0);
+    }
+    ctx.fillStyle = T.muted;
+    ctx.textAlign = "right"; ctx.textBaseline = "top";
+    ctx.fillText("0", Math.max(cx - 7, 8), Math.min(cy + 5, h - 16));
+  }
+
+  function plotCurve(w, h, f, style, width, dash){
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, w, h); ctx.clip();
+    ctx.strokeStyle = style; ctx.lineWidth = width;
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+    ctx.setLineDash(dash || []);
+    ctx.beginPath();
+    var started = false, LIM = 6 * h;
+    for (var p = -1; p <= w + 1; p += 1){
+      var xv = (p - ox) / scale;
+      var Y = py(f(xv));
+      if (!isFinite(Y) || Y < -LIM || Y > LIM){ started = false; continue; }
+      if (started) ctx.lineTo(p, Y); else { ctx.moveTo(p, Y); started = true; }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  function arrow(x1, y1, x2, y2, color){
+    var dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy);
+    if (L < 6) return;
+    var ux = dx / L, uy = dy / L, hd = 9;
+    ctx.strokeStyle = color; ctx.lineWidth = 1.6;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - ux * hd, y2 - uy * hd); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - ux * hd - uy * 4.2, y2 - uy * hd + ux * 4.2);
+    ctx.lineTo(x2 - ux * hd + uy * 4.2, y2 - uy * hd - ux * 4.2);
+    ctx.closePath(); ctx.fill();
+  }
+
+  function label(text, x, y, color, align, baseline){
+    ctx.font = '12px "IBM Plex Sans", sans-serif';
+    ctx.textAlign = align; ctx.textBaseline = baseline;
+    ctx.lineWidth = 3.5; ctx.strokeStyle = T.surface;
+    ctx.strokeText(text, x, y);
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+  }
+
+  function draw(){
+    var d = resize(), w = d.w, h = d.h;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(w, h);
+
+    var P = function(x){ return a * (x - al) * (x - al) + be; };
+    var showRoots = cbRoots.checked && a !== 0;
+
+    // axe de symétrie x = α  et  niveau y = β
+    if (showRoots){
+      ctx.save();
+      ctx.setLineDash([6, 5]); ctx.lineWidth = 1.4;
+      ctx.strokeStyle = T.alpha;
+      ctx.beginPath(); ctx.moveTo(px(al), 0); ctx.lineTo(px(al), h); ctx.stroke();
+      ctx.strokeStyle = T.beta;
+      ctx.beginPath(); ctx.moveTo(0, py(be)); ctx.lineTo(w, py(be)); ctx.stroke();
+      ctx.restore();
+      label("x = " + fmt(al), px(al) + 6, 8, T.alpha, "left", "top");
+      label("y = " + fmt(be), w - 8, py(be) - 8, T.beta, "right", "bottom");
+    }
+
+    drawAxes(w, h);
+
+    // parabole de référence y = a x²  +  vecteur de translation
+    if (cbRef.checked && a !== 0){
+      plotCurve(w, h, function(x){ return a * x * x; }, T.ref, 1.6, [6, 5]);
+      arrow(px(0), py(0), px(al), py(be), T.vec);
+    }
+
+    // courbe P
+    plotCurve(w, h, P, T.curve, 2.6);
+
+    // racines
+    if (showRoots){
+      var r = -be / a;
+      if (r > 1e-12){
+        var s = Math.sqrt(r);
+        [al - s, al + s].forEach(function(x){
+          ctx.fillStyle = T.surface; ctx.strokeStyle = T.curve; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(px(x), py(0), 4.5, 0, 6.284); ctx.fill(); ctx.stroke();
+        });
+      } else if (Math.abs(r) <= 1e-12){
+        ctx.fillStyle = T.surface; ctx.strokeStyle = T.curve; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(px(al), py(0), 4.5, 0, 6.284); ctx.fill(); ctx.stroke();
+      }
+    }
+
+    // sommet S
+    if (a !== 0){
+      var sx = px(al), sy = py(be);
+      ctx.fillStyle = T.alpha;
+      ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, 6.284); ctx.fill();
+      ctx.strokeStyle = T.surface; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(sx, sy, 5.5, 0, 6.284); ctx.stroke();
+      var below = a > 0;
+      label("S (" + fmt(al) + " ; " + fmt(be) + ")",
+            sx + 10, sy + (below ? 12 : -12), T.alpha, "left", below ? "top" : "bottom");
+    } else {
+      plotCurve(w, h, function(){ return be; }, T.curve, 2.6);
+    }
+  }
+
+  /* ---------- lecture des résultats ---------- */
+  function refresh(){
+    document.getElementById("eqCanon").innerHTML = canonHTML();
+    document.getElementById("eqDev").innerHTML = devHTML();
+    document.getElementById("valA").textContent = fmt(a);
+    document.getElementById("valAl").textContent = fmt(al);
+    document.getElementById("valBe").textContent = fmt(be);
+    document.getElementById("warn").classList.toggle("on", a === 0);
+
+    var som = document.getElementById("rSommet"),
+        axe = document.getElementById("rAxe"),
+        ext = document.getElementById("rExt"),
+        del = document.getElementById("rDelta"),
+        rac = document.getElementById("rRac");
+
+    if (a === 0){
+      som.innerHTML = "<span class='u'>aucun</span>";
+      axe.innerHTML = "<span class='u'>aucun</span>";
+      ext.innerHTML = "<span class='u'>fonction constante</span>";
+      del.innerHTML = "<span class='u'>non défini</span>";
+      rac.innerHTML = be === 0 ? "<span class='u'>tous les réels</span>" : "<span class='u'>aucune</span>";
+      draw(); return;
+    }
+
+    som.innerHTML = "<i>S</i>&#8202;(<span class='k-al'>" + fmt(al) + "</span>&#8202;;&#8202;<span class='k-be'>" + fmt(be) + "</span>)";
+    axe.innerHTML = "<i>x</i> = <span class='k-al'>" + fmt(al) + "</span>";
+    ext.innerHTML = (a > 0 ? "minimum " : "maximum ") + "<span class='k-be'>" + fmt(be) + "</span>" +
+                    " <span class='u'>en " + fmt(al) + "</span>";
+
+    var D = -4 * a * be;
+    del.innerHTML = "Δ = " + fmt(D) + " <span class='u'>(" + (D > 1e-9 ? "> 0" : (D < -1e-9 ? "< 0" : "= 0")) + ")</span>";
+
+    var r = -be / a;
+    if (r > 1e-12){
+      var s = Math.sqrt(r), x1 = al - s, x2 = al + s;
+      var exact = Math.abs(s - Math.round(s * 100) / 100) < 1e-9 && Math.abs(x1 * 100 - Math.round(x1 * 100)) < 1e-6;
+      rac.innerHTML = (exact ? "" : "<span class='u'>≈</span> ") +
+                      fmt(x1) + " <span class='u'>et</span> " + fmt(x2);
+    } else if (Math.abs(r) <= 1e-12){
+      rac.innerHTML = fmt(al) + " <span class='u'>(double)</span>";
+    } else {
+      rac.innerHTML = "<span class='u'>aucune racine réelle</span>";
+    }
+    draw();
+  }
+
+  /* ---------- interactions ---------- */
+  function pull(){
+    a = round1(parseFloat(slA.value));
+    al = round1(parseFloat(slAl.value));
+    be = round1(parseFloat(slBe.value));
+    refresh();
+  }
+  [slA, slAl, slBe].forEach(function(el){ el.addEventListener("input", pull); });
+  [cbRef, cbRoots].forEach(function(el){ el.addEventListener("change", refresh); });
+
+  document.getElementById("reset").addEventListener("click", function(){
+    slA.value = DEF.a; slAl.value = DEF.al; slBe.value = DEF.be;
+    zoom = 1; pull();
+  });
+
+  // glisser le sommet
+  var dragging = false;
+  function near(e){
+    var r = cv.getBoundingClientRect();
+    return Math.hypot(e.clientX - r.left - px(al), e.clientY - r.top - py(be)) < 16;
+  }
+  cv.addEventListener("pointermove", function(e){
+    if (!dragging){ cv.style.cursor = (a !== 0 && near(e)) ? "grab" : "crosshair"; return; }
+    var r = cv.getBoundingClientRect();
+    var nx = round1((e.clientX - r.left - ox) / scale);
+    var ny = round1((oy - (e.clientY - r.top)) / scale);
+    slAl.value = Math.max(-10, Math.min(10, nx));
+    slBe.value = Math.max(-10, Math.min(10, ny));
+    pull();
+  });
+  cv.addEventListener("pointerdown", function(e){
+    if (a === 0 || !near(e)) return;
+    dragging = true; cv.setPointerCapture(e.pointerId);
+    cv.style.cursor = "grabbing"; e.preventDefault();
+  });
+  cv.addEventListener("pointerup", function(){ dragging = false; cv.style.cursor = "grab"; });
+  cv.addEventListener("pointercancel", function(){ dragging = false; });
+
+  cv.addEventListener("wheel", function(e){
+    e.preventDefault();
+    zoom = Math.max(0.35, Math.min(3.5, zoom * (e.deltaY < 0 ? 1.1 : 1 / 1.1)));
+    draw();
+  }, {passive:false});
+  cv.addEventListener("dblclick", function(){ zoom = 1; draw(); });
+
+  /* ---------- démarrage ---------- */
+  readTokens();
+  pull();
+
+  if (window.ResizeObserver) new ResizeObserver(draw).observe(cv.parentNode);
+  else window.addEventListener("resize", draw);
+
+  var mq = window.matchMedia("(prefers-color-scheme: dark)");
+  var onTheme = function(){ readTokens(); draw(); };
+  if (mq.addEventListener) mq.addEventListener("change", onTheme); else mq.addListener(onTheme);
+  new MutationObserver(onTheme).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>
+</body>
+</html>
