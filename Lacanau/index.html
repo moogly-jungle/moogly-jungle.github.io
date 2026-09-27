@@ -1,0 +1,495 @@
+<title>Baromètre des réservations</title>
+<style>
+:root {
+  color-scheme: light;
+  --ground:#EEF1F0; --surface:#FFFFFF; --surface-2:#F6F8F7;
+  --ink:#12232A; --ink-soft:#56686E; --ink-faint:#8598A0;
+  --hairline:#D3DCDA; --hairline-strong:#B9C6C3;
+  --s1:#42B0A6; --s2:#0E8B80; --s3:#02574E;
+  --mark:#B4622D; --mark-soft:#F0E0D3;
+  --t1:#5AB0A6; --t2:#2B9188; --t3:#0A6A61; --t4:#01423B;
+  --display:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --data:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:#0F191D; --surface:#131E22; --surface-2:#182529;
+    --ink:#E2EAE8; --ink-soft:#93A5A9; --ink-faint:#6B7F84;
+    --hairline:#24343A; --hairline-strong:#33474E;
+    --s1:#0E8B80; --s2:#35B0A5; --s3:#6FD3C8;
+    --mark:#E08A4C; --mark-soft:#3A2A1C;
+    --t1:#0E8B80; --t2:#2AA79B; --t3:#4FC4B8; --t4:#7FDDD3;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:#0F191D; --surface:#131E22; --surface-2:#182529;
+  --ink:#E2EAE8; --ink-soft:#93A5A9; --ink-faint:#6B7F84;
+  --hairline:#24343A; --hairline-strong:#33474E;
+  --s1:#0E8B80; --s2:#35B0A5; --s3:#6FD3C8;
+  --mark:#E08A4C; --mark-soft:#3A2A1C;
+  --t1:#0E8B80; --t2:#2AA79B; --t3:#4FC4B8; --t4:#7FDDD3;
+}
+
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--body); font-size:16.5px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap { max-width:1080px; margin:0 auto; padding:0 28px 96px; }
+.measure { max-width:68ch; }
+
+/* --- en-tête ------------------------------------------------------------- */
+header.masthead { padding:72px 0 40px; border-bottom:1px solid var(--hairline-strong); }
+.eyebrow {
+  font-family:var(--data); font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-faint); margin:0 0 18px;
+}
+h1 {
+  font-family:var(--display); font-weight:600; font-size:clamp(34px,5.2vw,56px);
+  line-height:1.06; letter-spacing:-.015em; margin:0 0 20px; text-wrap:balance;
+}
+.standfirst { font-size:19px; line-height:1.55; color:var(--ink-soft); margin:0; max-width:60ch; }
+
+/* --- sections ------------------------------------------------------------ */
+section { padding-top:56px; }
+h2 {
+  font-family:var(--display); font-weight:600; font-size:27px; line-height:1.2;
+  margin:0 0 6px; letter-spacing:-.01em; text-wrap:balance;
+}
+h2 + .kicker { color:var(--ink-faint); margin:0 0 26px; font-size:15px; }
+h3 { font-family:var(--body); font-size:15px; font-weight:650; margin:32px 0 10px;
+     letter-spacing:.01em; }
+p { margin:0 0 16px; }
+a { color:var(--s2); }
+
+/* --- tuiles -------------------------------------------------------------- */
+.tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(184px,1fr));
+         gap:1px; background:var(--hairline); border:1px solid var(--hairline);
+         margin:34px 0 8px; }
+.tile { background:var(--surface); padding:20px 20px 18px; }
+.tile .label { font-family:var(--data); font-size:10.5px; letter-spacing:.13em;
+               text-transform:uppercase; color:var(--ink-faint); margin-bottom:9px; }
+.tile .value { font-family:var(--data); font-size:29px; font-weight:600;
+               font-variant-numeric:tabular-nums; letter-spacing:-.02em; line-height:1; }
+.tile .note { font-size:12.5px; color:var(--ink-soft); margin-top:7px; line-height:1.4; }
+.tile.accent .value { color:var(--mark); }
+
+/* --- tableaux ------------------------------------------------------------ */
+.scroll { overflow-x:auto; margin:22px 0; border:1px solid var(--hairline);
+          background:var(--surface); }
+table { border-collapse:collapse; width:100%; font-size:14.5px; }
+th, td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--hairline);
+         white-space:nowrap; }
+thead th { font-family:var(--data); font-size:10.5px; letter-spacing:.11em;
+           text-transform:uppercase; color:var(--ink-faint); font-weight:500;
+           background:var(--surface-2); }
+tbody tr:last-child td { border-bottom:none; }
+td.num { text-align:right; font-family:var(--data); font-variant-numeric:tabular-nums; }
+tr.is-mine td { background:var(--mark-soft); font-weight:600; }
+
+/* --- graphiques ---------------------------------------------------------- */
+figure { margin:26px 0 8px; }
+figcaption { font-size:13px; color:var(--ink-soft); margin-top:12px; line-height:1.5; }
+.legend { display:flex; flex-wrap:wrap; gap:16px; margin:0 0 14px;
+          font-size:12.5px; color:var(--ink-soft); }
+.legend span { display:inline-flex; align-items:center; gap:7px; }
+.swatch { width:11px; height:11px; border-radius:2px; display:inline-block; }
+svg { display:block; width:100%; height:auto; }
+svg text { font-family:var(--data); font-variant-numeric:tabular-nums; }
+
+/* --- encarts ------------------------------------------------------------- */
+.callout { border-left:3px solid var(--mark); background:var(--surface);
+           padding:18px 22px; margin:24px 0; }
+.callout .h { font-family:var(--data); font-size:10.5px; letter-spacing:.13em;
+              text-transform:uppercase; color:var(--mark); margin-bottom:8px; }
+.callout p:last-child { margin-bottom:0; }
+.caveat { border-left:3px solid var(--hairline-strong); background:var(--surface-2);
+          padding:16px 20px; margin:22px 0; font-size:14.5px; color:var(--ink-soft); }
+.caveat p:last-child { margin-bottom:0; }
+.quote { font-family:var(--display); font-style:italic; font-size:15.5px;
+         color:var(--ink-soft); border-left:2px solid var(--hairline-strong);
+         padding-left:16px; margin:10px 0; }
+footer { margin-top:76px; padding-top:26px; border-top:1px solid var(--hairline-strong);
+         font-size:13px; color:var(--ink-faint); }
+@media (prefers-reduced-motion:no-preference) { .bar { transition:opacity .15s; } }
+
+.commandes { display:flex; flex-wrap:wrap; gap:14px 26px; align-items:center;
+             margin:22px 0 0; }
+.commandes .jeu { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.commandes .etiq { font-family:var(--data); font-size:10px; letter-spacing:.13em;
+                   text-transform:uppercase; color:var(--ink-faint);
+                   margin-right:4px; }
+button.f { font:inherit; font-size:13px; padding:4px 11px; cursor:pointer;
+           background:var(--surface); color:var(--ink-soft);
+           border:1px solid var(--hairline); border-radius:3px; }
+button.f:hover { border-color:var(--hairline-strong); color:var(--ink); }
+button.f:focus-visible { outline:2px solid var(--s2); outline-offset:1px; }
+button.f.on { background:var(--s3); border-color:var(--s3); color:#fff; }
+.commandes .compte { margin:0; font-family:var(--data); font-size:12px;
+                     color:var(--ink-faint); }
+th.triable { cursor:pointer; user-select:none; position:relative; }
+th.triable:hover { color:var(--ink); }
+th.triable:focus-visible { outline:2px solid var(--s2); outline-offset:-2px; }
+th.triable[data-tri]::after { content:"\2191"; margin-left:4px; color:var(--s2); }
+th.triable[data-tri="desc"]::after { content:"\2193"; }
+@media print { .commandes { display:none; } th.triable::after { content:none; } }
+
+.src { font-family:var(--data); font-size:11.5px; color:var(--ink-faint); }
+/* Le titre de l'annonce est la seule colonne à texte libre. On le laisse
+   revenir à la ligne, en très petit, dans une boîte de hauteur fixe : deux
+   lignes, pas une de plus, sinon les rangées prennent des hauteurs différentes
+   et se coupent entre deux pages. La hauteur bornée vaut mieux que
+   -webkit-line-clamp, qui ne s'applique pas à l'impression. Certains titres
+   n'ont aucune espace (« T3 50m²+Terrasse15m²vue mer,6pers »), d'où la
+   coupure autorisée n'importe où. Le titre complet reste en infobulle. */
+/* Même contrainte que pour le titre : deux lignes de pastilles au plus, dans
+   une boîte de hauteur fixe, sinon quelques rangées grandissent et le tableau
+   perd son peigne. */
+td.options { white-space:normal; max-width:152px; padding-top:6px;
+               padding-bottom:6px; vertical-align:middle; }
+td.options span.lot { display:block; max-height:26px; overflow:hidden; }
+i.opt { font-style:normal; font-family:var(--data); font-size:8px;
+         letter-spacing:.01em; line-height:1.3; padding:1px 4px;
+         border-radius:2.5px; margin:0 3px 1px 0; display:inline-block;
+         white-space:nowrap; }
+i.opt.fort { background:var(--mark-soft); color:var(--mark); }
+i.opt.doux { background:var(--surface-2); color:var(--ink-soft);
+              border:1px solid var(--hairline); }
+span.rien { color:var(--ink-faint); }
+/* La vignette de la résidence Bleu Marine. Un bleu marine, forcément. */
+i.bm { font-style:normal; font-family:var(--data); font-size:8px;
+        letter-spacing:.04em; padding:1px 5px; border-radius:2.5px;
+        background:#1B3A6B; color:#fff; display:inline-block;
+        margin-bottom:2px; white-space:nowrap; }
+@media (prefers-color-scheme: dark) { i.bm { background:#4F7BC4; color:#0F191D; } }
+td.fen { font-size:12px; white-space:nowrap; }
+/* Les chiffres de volume et ceux de prix forment deux rangées
+   distinctes, sans rompre le quadrillage : le second bloc se colle
+   au premier par la même hairline. */
+.tiles.suite { margin-top:1px; }
+/* La colonne « date de réservation » se replie : elle éclaire la méthode mais
+   encombre la lecture courante. Avec table-layout:fixed, masquer les cellules
+   ne suffit pas — la colonne garde sa largeur — d'où le col mis à zéro, et la
+   largeur rendue à la colonne du titre. */
+table.sans-res th:nth-child(3), table.sans-res td:nth-child(3) { display:none; }
+table.sans-res col.c-res { width:0; }
+table.sans-res col:last-child { width:37%; }
+.bascule { display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+            font-size:13px; color:var(--ink-soft); }
+.bascule input { width:15px; height:15px; accent-color:var(--s3);
+                  cursor:pointer; margin:0; }
+.bascule:hover { color:var(--ink); }
+/* La fraîcheur est la première question qu'on pose à un baromètre : elle se
+   lit au-dessus du titre, pas en pied de page. */
+.eyebrow .maj { color:var(--mark); text-transform:none; letter-spacing:.04em;
+                 margin-left:14px; }
+@media (max-width:520px) { .eyebrow .maj { display:block; margin:6px 0 0; } }
+td.al { text-align:right; }
+td.options.al span.lot { text-align:right; }
+td.options.al i.opt { margin:0 0 1px 3px; }
+td.annonce { white-space:normal; max-width:200px; padding-top:6px;
+              padding-bottom:6px; vertical-align:middle; }
+td.annonce span {
+  display:block; max-height:2.3em; overflow:hidden;
+  font-size:9.5px; line-height:1.15; color:var(--ink-soft);
+  overflow-wrap:anywhere;
+}
+/* Le titre mène à l'annonce. Le lien survit à l'impression : un PDF garde ses
+   ancres, encore faut-il qu'on voie qu'il y en a une — d'où le soulignement
+   discret, que la feuille commune retire par défaut pour l'impression. */
+td.annonce a { text-decoration:none; color:inherit; }
+td.annonce a span { border-bottom:1px solid var(--hairline-strong); }
+td.annonce a:hover span, td.annonce a:focus-visible span {
+  color:var(--s2); border-bottom-color:var(--s2); }
+@media print { td.annonce a span { border-bottom:1px solid #c8d2d0; } }
+tr.flou td { color:var(--ink-faint); }
+tr.flou td strong { font-weight:500; }
+/* Deux sections seulement : le saut de page systématique de la
+   feuille commune laisserait une page presque vide. */
+/* La zone imprimable d'une A4 fait 182 mm : à la taille de l'écran les
+   en-têtes se chevauchent et la colonne des dates mord sur la suivante. Tout
+   le jeu de tailles descend donc d'un cran à l'impression. */
+@media print {
+  section { break-before:auto; padding-top:26px; }
+  .tiles { page-break-inside:avoid; }
+  table { table-layout:fixed; width:100%; font-size:7.5pt; }
+  thead th { font-size:6pt; letter-spacing:.03em; padding:5px 4px; }
+  td { padding:5px 4px; }
+  td.fen { font-size:7pt; }
+  td.annonce span { font-size:6.5pt; max-height:3.4em; line-height:1.12; }
+  td.options span.lot { max-height:30px; }
+  i.opt { font-size:6pt; padding:1px 3px; }
+  td.annonce, td.options { max-width:none; }
+}
+</style>
+<div class="wrap">
+<header class="masthead">
+  <p class="eyebrow">Veille · vue dégagée sur l'océan
+  <span class="maj">mis à jour le 27 septembre à
+  21h59</span></p>
+  <h1>Baromètre des réservations</h1>
+  <p class="standfirst">Les séjours qui ont été réservés entre le
+  7 et le 27 septembre sur les
+  57 logements à vue dégagée sur l'océan de Lacanau Océan, pour un
+  séjour encore à venir. Une nuit qui passe de disponible à indisponible
+  entre deux relevés est une réservation certaine.</p>
+</header>
+<div class="tiles">
+  <div class="tile"><div class="label">Séjours réservés</div>
+    <div class="value" id="tSejours">65</div>
+    <div class="note">séjours encore à venir</div></div>
+  <div class="tile"><div class="label">Nuits</div>
+    <div class="value" id="tNuits">305</div>
+    <div class="note" id="tMoy">4.7 par séjour en moyenne</div></div>
+  <div class="tile"><div class="label">Annonces</div>
+    <div class="value" id="tAnnonces">31</div>
+    <div class="note">sur <span id="tSegment">57</span> du segment</div></div>
+</div>
+<div class="tiles suite">
+  <div class="tile accent"><div class="label">Prix médian</div>
+    <div class="value" id="tMed">138 €</div>
+    <div class="note">par nuit, tout compris</div></div>
+  <div class="tile"><div class="label">Fourchette centrale</div>
+    <div class="value" id="tQuart">107–179 €</div>
+    <div class="note">du 1<sup>er</sup> au 3<sup>e</sup> quartile : la moitié
+      des séjours s'y trouve</div></div>
+  <div class="tile"><div class="label">Étendue</div>
+    <div class="value" id="tEtendue">74–298 €</div>
+    <div class="note">du moins cher au plus cher</div></div>
+</div>
+<div class="caveat"><p><strong>Ce que le prix ne contient pas.</strong> Les
+montants de ce document sont ceux qu'Airbnb affiche au voyageur pour ces dates :
+hébergement, forfait ménage et taxe de séjour compris. Ils ignorent tout ce qui
+s'ajoute au moment de réserver ou à l'arrivée — voyageur supplémentaire, animal,
+location de draps ou de linge, ménage optionnel, caution, arrivée tardive. Ces
+suppléments ne sont pas observables : ils se négocient hors du prix affiché, et
+beaucoup d'hôtes ne les mentionnent que dans le texte de leur annonce. Le total
+réellement encaissé est donc au moins égal à ces chiffres, parfois
+sensiblement plus.</p></div>
+<section><h2>De quoi parle-t-on</h2>
+<div class="measure">
+<p>Le segment surveillé, ce sont les <strong>57 annonces</strong> du
+marché de Lacanau Océan qui remplissent deux conditions à la fois.</p>
+<p><strong>Un logement entier</strong>, appartement comme maison — la catégorie
+que déclare l'hôte à Airbnb. Composition : 4 studio, 24 T2, 25 T3, 3 T4.</p>
+<p><strong>Une vue franchement dégagée sur l'océan</strong>, revendiquée dans le
+titre ou le descriptif. C'est une lecture du texte, pas une donnée fournie par
+Airbnb : sont retenus les mots qui engagent l'hôte — « imprenable »,
+« dégagée », « panoramique », « frontale », « plongeante », « directe »,
+« pleine vue ». Un simple « vue mer » ou « vue océan » ne suffit pas, et une
+vue explicitement « latérale » ou « partielle » est écartée. Cette distinction
+n'est pas cosmétique : le marché paie 164 € la nuit une vue franchement
+dégagée, contre 135 € une vue seulement revendiquée.</p>
+<p><strong>À moins de 300 m du trait de côte.</strong> Le segment va de
+62 m à 299 m, médiane 187 m.
+Au-delà, une vue dégagée revendiquée devient douteuse : on tombe sur des biens
+de l'arrière-pays qui aperçoivent l'océan depuis un étage. À garder en tête,
+les coordonnées Airbnb sont brouillées d'environ 150 m, donc la borne est
+approximative par nature.</p>
+<p><strong>Le filtre « &le; 500 m » élargit la vue</strong> à
+6 annonces supplémentaires, jusqu'à 433 m. Tous les
+chiffres de tête suivent le filtre : médiane, quartiles et étendue sont
+recalculés sur les seules lignes affichées. Cet élargissement ne coûte rien à
+la collecte — les calendriers de ces annonces sont déjà relus six fois par
+jour, la borne n'existait qu'à l'affichage.</p>
+<p>En revanche, <strong>ne pas lire un écart de prix entre les deux
+bandes</strong> comme une prime de proximité. Le brouillage de 150 m est du
+même ordre de grandeur que la largeur de la bande ajoutée : une annonce
+mesurée à 310 m peut être à 250, et l'inverse est vrai aussi. Le filtre sert à
+voir plus de réservations, pas à comparer des distances.</p>
+</div></section>
+
+<section><h2>Le détail</h2>
+<p class="kicker">Par date de séjour. Le prix est celui demandé pour ces
+dates — tout compris, ménage et taxe de séjour inclus.</p>
+<div class="caveat"><p><strong>La date de réservation est une fenêtre, pas
+un instant.</strong> On ne sait pas quand le voyageur a cliqué, seulement qu'il l'a
+fait entre le relevé qui trouvait la nuit libre et celui qui l'a trouvée prise.
+Les premières lignes portent une fenêtre de six jours — le relevé de référence
+date du 7 septembre et le suivant du 13. Depuis le 14 septembre les calendriers
+sont relus toutes les trois heures : une date seule signifie que la fenêtre
+tient dans la journée.</p>
+<p><strong>La vignette « Bleu Marine »</strong> signale les annonces d'une même
+résidence — même bâtiment, même piscine, même accès. Une cinquantaine de
+logements y sont loués séparément : les repérer permet de comparer des biens
+réellement comparables. Elle est posée quand le descriptif la nomme, ou quand les photos
+montrent le garde-corps bleu des balcons ou la piscine de la résidence. Les
+coordonnées ne servent à rien pour ça : Airbnb les brouille de 150 m, et les
+annonces qui se nomment Bleu Marine s'étalent de 124 m à 391 m du trait de
+côte.</p>
+<p><strong>Les lignes grisées portent un prix approché.</strong>
+Les prix viennent des balayages de recherche, qui portent sur des fenêtres de
+dates choisies à l'avance : pour la plupart des séjours ci-dessous il existe un
+relevé sur les mêmes dates ou à un ou deux jours près, mais pas pour tous.
+Quand le relevé le plus proche s'éloigne de plus de trois jours, ou porte sur
+une durée de séjour très différente, le prix reste indicatif — il est grisé et
+exclu du prix médian.</p></div>
+
+<div class="commandes" role="group" aria-label="Filtres">
+  <div class="jeu">
+    <span class="etiq">Type</span>
+    <button type="button" class="f on" data-f="type" data-v="">tous</button>
+    <button type="button" class="f" data-f="type" data-v="studio">studio</button>
+    <button type="button" class="f" data-f="type" data-v="T2">T2</button>
+    <button type="button" class="f" data-f="type" data-v="T3">T3</button>
+    <button type="button" class="f" data-f="type" data-v="T4">T4 et +</button>
+  </div>
+  <div class="jeu">
+    <span class="etiq">Options</span>
+    <button type="button" class="f on" data-f="opt" data-v="">toutes</button>
+    <button type="button" class="f" data-f="opt" data-v="menage">ménage</button>
+    <button type="button" class="f" data-f="opt" data-v="linge">linge</button>
+    <button type="button" class="f" data-f="opt" data-v="rien">aucune</button>
+  </div>
+  <div class="jeu">
+    <span class="etiq">Distance</span>
+    <button type="button" class="f on" data-f="dist" data-v="300"
+            data-seg="57">&le; 300 m</button>
+    <button type="button" class="f" data-f="dist" data-v="500"
+            data-seg="63">&le; 500 m</button>
+  </div>
+  <label class="bascule"><input type="checkbox" id="voirRes" checked>
+    <span>Afficher la date de réservation</span></label>
+  <p class="compte" id="compte" aria-live="polite"></p>
+</div>
+
+<div class="scroll"><table><colgroup>
+<col style="width:5%"><col style="width:9%"><col class="c-res" style="width:15%">
+<col style="width:7%"><col style="width:8%"><col style="width:8%">
+<col style="width:8%"><col style="width:18%"><col style="width:22%"></colgroup><thead><tr>
+<th class="num">Nuits</th><th class="num">Début</th><th class="num">Date de réservation</th><th class="num">Type</th>
+<th class="num">Couchages</th><th class="num">Distance</th><th class="num">€/nuit</th><th class="num">Options annoncées</th><th>Annonce</th>
+</tr></thead><tbody><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="1083660089136357580" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261026">26/10/26</td><td class="num fen" data-v="20260927">27/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="100"><strong>100 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage en option 65 €</i><i class="opt doux">linge 9 €</i></span></td><td class="annonce" title="&quot;L&#x27;Été Sans Fin&quot;. 
+Joli T2-balcon face à l&#x27;océan"><i class="bm">Bleu Marine</i><a href="https://www.airbnb.fr/rooms/1083660089136357580"><span>&quot;L&#x27;Été Sans Fin&quot;. 
+Joli T2-balcon face à l&#x27;océan</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="307" data-lid="1773231844477051625" data-ferme=""><td class="num" data-v="7">7</td><td class="num" data-v="20270419">19/04/27</td><td class="num fen" data-v="20260927">27/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="307">307 m</td><td class="num" data-v="172"><strong>172 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement T3 avec grande terrasse vue mer"><i class="bm">Bleu Marine</i><a href="https://www.airbnb.fr/rooms/1773231844477051625"><span>Appartement T3 avec grande terrasse vue mer</span></a></td></tr><tr class="flou" data-type="T3" data-opt="linge" data-dist="62" data-lid="60039" data-ferme=""><td class="num" data-v="5">5</td><td class="num" data-v="20270321">21/03/27</td><td class="num fen" data-v="20260927">27/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="62">62 m</td><td class="num" data-v="113"><strong>113 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="pleine Vue océan triplex 2ch2sdb WIFI freeParking."><a href="https://www.airbnb.fr/rooms/60039"><span>pleine Vue océan triplex 2ch2sdb WIFI freeParking.</span></a></td></tr><tr class="flou" data-type="T2" data-opt="menage" data-dist="157" data-lid="43961797" data-ferme=""><td class="num" data-v="3">3</td><td class="num" data-v="20261006">06/10/26</td><td class="num fen" data-v="20260927">27/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="157">157 m</td><td class="num" data-v="148"><strong>148 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage inclus</i></span></td><td class="annonce" title="Joli F2 avec balcon face à l&#x27;Océan, hyper centre"><a href="https://www.airbnb.fr/rooms/43961797"><span>Joli F2 avec balcon face à l&#x27;Océan, hyper centre</span></a></td></tr><tr data-type="T2" data-opt="menage" data-dist="157" data-lid="43961797" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20260927">27/09/26</td><td class="num fen" data-v="20260927">27/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="157">157 m</td><td class="num" data-v="106"><strong>106 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage inclus</i></span></td><td class="annonce" title="Joli F2 avec balcon face à l&#x27;Océan, hyper centre"><a href="https://www.airbnb.fr/rooms/43961797"><span>Joli F2 avec balcon face à l&#x27;Océan, hyper centre</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="244" data-lid="1428770678084560894" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261002">02/10/26</td><td class="num fen" data-v="20260926">26/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="244">244 m</td><td class="num" data-v="188"><strong>188 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Le Perchoir sur l&#x27;Océan - Lacanau"><a href="https://www.airbnb.fr/rooms/1428770678084560894"><span>Le Perchoir sur l&#x27;Océan - Lacanau</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="165" data-lid="1702807994489724875" data-ferme=""><td class="num" data-v="14">14</td><td class="num" data-v="20270717">17/07/27</td><td class="num fen" data-v="20260926">26/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="165">165 m</td><td class="num" data-v="278"><strong>278 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Ortal Océan par Interhome"><a href="https://www.airbnb.fr/rooms/1702807994489724875"><span>Ortal Océan par Interhome</span></a></td></tr><tr class="flou" data-type="T2" data-opt="" data-dist="189" data-lid="1682592459331994558" data-ferme=""><td class="num" data-v="14">14</td><td class="num" data-v="20270619">19/06/27</td><td class="num fen" data-v="20260926">26/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="189">189 m</td><td class="num" data-v="92"><strong>92 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement face à l’Océan"><a href="https://www.airbnb.fr/rooms/1682592459331994558"><span>Appartement face à l’Océan</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="307" data-lid="1773231844477051625" data-ferme=""><td class="num" data-v="3">3</td><td class="num" data-v="20260927">27/09/26</td><td class="num fen" data-v="20260925">25/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="307">307 m</td><td class="num" data-v="201"><strong>201 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement T3 avec grande terrasse vue mer"><i class="bm">Bleu Marine</i><a href="https://www.airbnb.fr/rooms/1773231844477051625"><span>Appartement T3 avec grande terrasse vue mer</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="83" data-lid="17777502" data-ferme="1"><td class="num" data-v="4">4</td><td class="num" data-v="20261004">04/10/26</td><td class="num fen" data-v="20260925">25/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="83">83 m</td><td class="num" data-v="226"><strong>226 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°2"><a href="https://www.airbnb.fr/rooms/17777502"><span>T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°2</span></a></td></tr><tr class="flou" data-type="T2" data-opt="" data-dist="189" data-lid="1682592459331994558" data-ferme=""><td class="num" data-v="5">5</td><td class="num" data-v="20260928">28/09/26</td><td class="num fen" data-v="20260925">25/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="189">189 m</td><td class="num" data-v="71"><strong>71 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement face à l’Océan"><a href="https://www.airbnb.fr/rooms/1682592459331994558"><span>Appartement face à l’Océan</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="220" data-lid="1573052801106775835" data-ferme="1"><td class="num" data-v="9">9</td><td class="num" data-v="20260924">24/09/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="220">220 m</td><td class="num" data-v="148"><strong>148 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement T2 face à l’océan – Lacanau Océan"><a href="https://www.airbnb.fr/rooms/1573052801106775835"><span>Appartement T2 face à l’océan – Lacanau Océan</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="104" data-lid="17777481" data-ferme="1"><td class="num" data-v="7">7</td><td class="num" data-v="20260924">24/09/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="104">104 m</td><td class="num" data-v="164"><strong>164 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°5"><a href="https://www.airbnb.fr/rooms/17777481"><span>T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°5</span></a></td></tr><tr class="flou" data-type="T2" data-opt="linge" data-dist="181" data-lid="47878371" data-ferme=""><td class="num" data-v="2">2</td><td class="num" data-v="20261030">30/10/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="181">181 m</td><td class="num" data-v="172"><strong>172 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="1ère ligne, Dernier étage, Vue océan à 180°, pkg"><a href="https://www.airbnb.fr/rooms/47878371"><span>1ère ligne, Dernier étage, Vue océan à 180°, pkg</span></a></td></tr><tr data-type="studio" data-opt="" data-dist="228" data-lid="1599217239587592996" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261021">21/10/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="228">228 m</td><td class="num" data-v="97"><strong>97 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="*Charmant studio à 100m de la plage*"><a href="https://www.airbnb.fr/rooms/1599217239587592996"><span>*Charmant studio à 100m de la plage*</span></a></td></tr><tr data-type="T2" data-opt="linge" data-dist="189" data-lid="781288629881107830" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261231">31/12/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="189">189 m</td><td class="num" data-v="117"><strong>117 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Le 53, vue océan panoramique"><a href="https://www.airbnb.fr/rooms/781288629881107830"><span>Le 53, vue océan panoramique</span></a></td></tr><tr data-type="T3" data-opt="linge" data-dist="62" data-lid="60039" data-ferme="1"><td class="num" data-v="4">4</td><td class="num" data-v="20261028">28/10/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="62">62 m</td><td class="num" data-v="123"><strong>123 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="pleine Vue océan triplex 2ch2sdb WIFI freeParking."><a href="https://www.airbnb.fr/rooms/60039"><span>pleine Vue océan triplex 2ch2sdb WIFI freeParking.</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="165" data-lid="48838488" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20260926">26/09/26</td><td class="num fen" data-v="20260924">23 → 24/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="164"><strong>164 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Bohème en plein centre, belle vue océan et village"><a href="https://www.airbnb.fr/rooms/48838488"><span>Bohème en plein centre, belle vue océan et village</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="233" data-lid="17777497" data-ferme="1"><td class="num" data-v="6">6</td><td class="num" data-v="20261025">25/10/26</td><td class="num fen" data-v="20260923">22 → 23/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="233">233 m</td><td class="num" data-v="150"><strong>150 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4"><a href="https://www.airbnb.fr/rooms/17777497"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="251" data-lid="32324183" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20270523">23/05/27</td><td class="num fen" data-v="20260923">22 → 23/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="251">251 m</td><td class="num" data-v="223"><strong>223 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Superbe appart vue panoramique  à 100m de la plage"><a href="https://www.airbnb.fr/rooms/32324183"><span>Superbe appart vue panoramique  à 100m de la plage</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="205" data-lid="824379090340819016" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20260923">23/09/26</td><td class="num fen" data-v="20260922">22/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="205">205 m</td><td class="num" data-v="143"><strong>143 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="T2 Rés Océanides vue océan 180°"><a href="https://www.airbnb.fr/rooms/824379090340819016"><span>T2 Rés Océanides vue océan 180°</span></a></td></tr><tr data-type="T4" data-opt="menage linge" data-dist="89" data-lid="17777485" data-ferme="1"><td class="num" data-v="6">6</td><td class="num" data-v="20261017">17/10/26</td><td class="num fen" data-v="20260922">22/09/26</td><td class="al">T4</td><td class="num" data-v="8">8</td><td class="num" data-v="89">89 m</td><td class="num" data-v="193"><strong>193 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T4 85m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°6"><a href="https://www.airbnb.fr/rooms/17777485"><span>T4 85m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°6</span></a></td></tr><tr class="flou" data-type="T2" data-opt="" data-dist="63" data-lid="38543776" data-ferme=""><td class="num" data-v="7">7</td><td class="num" data-v="20270529">29/05/27</td><td class="num fen" data-v="20260922">22/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="63">63 m</td><td class="num" data-v="81"><strong>81 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Face à l&#x27;océan •Terrasse •Parking• Plage à 1 min"><a href="https://www.airbnb.fr/rooms/38543776"><span>Face à l&#x27;océan •Terrasse •Parking• Plage à 1 min</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="233" data-lid="17777497" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20260926">26/09/26</td><td class="num fen" data-v="20260922">22/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="233">233 m</td><td class="num" data-v="149"><strong>149 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4"><a href="https://www.airbnb.fr/rooms/17777497"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4</span></a></td></tr><tr class="flou" data-type="studio" data-opt="linge" data-dist="251" data-lid="52047957" data-ferme=""><td class="num" data-v="5">5</td><td class="num" data-v="20261005">05/10/26</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="251">251 m</td><td class="num" data-v="101"><strong>101 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Studio Superbe vue Ocean, la plage à ses pieds"><a href="https://www.airbnb.fr/rooms/52047957"><span>Studio Superbe vue Ocean, la plage à ses pieds</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="165" data-lid="48838488" data-ferme=""><td class="num" data-v="2">2</td><td class="num" data-v="20261019">19/10/26</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="164"><strong>164 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Bohème en plein centre, belle vue océan et village"><a href="https://www.airbnb.fr/rooms/48838488"><span>Bohème en plein centre, belle vue océan et village</span></a></td></tr><tr data-type="studio" data-opt="linge" data-dist="251" data-lid="52047957" data-ferme="1"><td class="num" data-v="4">4</td><td class="num" data-v="20261010">10/10/26</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="251">251 m</td><td class="num" data-v="108"><strong>108 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Studio Superbe vue Ocean, la plage à ses pieds"><a href="https://www.airbnb.fr/rooms/52047957"><span>Studio Superbe vue Ocean, la plage à ses pieds</span></a></td></tr><tr data-type="studio" data-opt="menage" data-dist="173" data-lid="44116866" data-ferme="1"><td class="num" data-v="4">4</td><td class="num" data-v="20270505">05/05/27</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="173">173 m</td><td class="num" data-v="97"><strong>97 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 50 €</i></span></td><td class="annonce" title="Studio Vue Imprenable Océan Parking Réservé"><a href="https://www.airbnb.fr/rooms/44116866"><span>Studio Vue Imprenable Océan Parking Réservé</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="244" data-lid="1428770678084560894" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261009">09/10/26</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="244">244 m</td><td class="num" data-v="168"><strong>168 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Le Perchoir sur l&#x27;Océan - Lacanau"><a href="https://www.airbnb.fr/rooms/1428770678084560894"><span>Le Perchoir sur l&#x27;Océan - Lacanau</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="150" data-lid="623808" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261012">12/10/26</td><td class="num fen" data-v="20260921">21/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="150">150 m</td><td class="num" data-v="114"><strong>114 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage</i><i class="opt doux">linge 85 €</i></span></td><td class="annonce" title="Duplex sunset pleine Vue Ocean+Parking+wifi fibre."><a href="https://www.airbnb.fr/rooms/623808"><span>Duplex sunset pleine Vue Ocean+Parking+wifi fibre.</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="104" data-lid="17777481" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20261001">01/10/26</td><td class="num fen" data-v="20260920">20/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="104">104 m</td><td class="num" data-v="202"><strong>202 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°5"><a href="https://www.airbnb.fr/rooms/17777481"><span>T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°5</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261007">07/10/26</td><td class="num fen" data-v="20260920">19 → 20/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="110"><strong>110 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="83" data-lid="17777502" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261002">02/10/26</td><td class="num fen" data-v="20260919">19/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="83">83 m</td><td class="num" data-v="226"><strong>226 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°2"><a href="https://www.airbnb.fr/rooms/17777502"><span>T3 65m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°2</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="220" data-lid="1716596462046052288" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261029">29/10/26</td><td class="num fen" data-v="20260919">19/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="220">220 m</td><td class="num" data-v="74"><strong>74 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement vue sur l&#x27;océan avec place de parking"><a href="https://www.airbnb.fr/rooms/1716596462046052288"><span>Appartement vue sur l&#x27;océan avec place de parking</span></a></td></tr><tr data-type="studio" data-opt="" data-dist="228" data-lid="1599217239587592996" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20260927">27/09/26</td><td class="num fen" data-v="20260919">19/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="228">228 m</td><td class="num" data-v="100"><strong>100 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="*Charmant studio à 100m de la plage*"><a href="https://www.airbnb.fr/rooms/1599217239587592996"><span>*Charmant studio à 100m de la plage*</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="244" data-lid="1428770678084560894" data-ferme="1"><td class="num" data-v="7">7</td><td class="num" data-v="20261024">24/10/26</td><td class="num fen" data-v="20260919">19/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="244">244 m</td><td class="num" data-v="156"><strong>156 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Le Perchoir sur l&#x27;Océan - Lacanau"><a href="https://www.airbnb.fr/rooms/1428770678084560894"><span>Le Perchoir sur l&#x27;Océan - Lacanau</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="244" data-lid="1428770678084560894" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261016">16/10/26</td><td class="num fen" data-v="20260918">18/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="244">244 m</td><td class="num" data-v="182"><strong>182 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Le Perchoir sur l&#x27;Océan - Lacanau"><a href="https://www.airbnb.fr/rooms/1428770678084560894"><span>Le Perchoir sur l&#x27;Océan - Lacanau</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="242" data-lid="17777500" data-ferme="1"><td class="num" data-v="9">9</td><td class="num" data-v="20260928">28/09/26</td><td class="num fen" data-v="20260917">16 → 17/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="242">242 m</td><td class="num" data-v="140"><strong>140 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°1"><a href="https://www.airbnb.fr/rooms/17777500"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°1</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261111">11/11/26</td><td class="num fen" data-v="20260916">16/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="104"><strong>104 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr class="flou" data-type="T3" data-opt="menage" data-dist="136" data-lid="31688407" data-ferme=""><td class="num" data-v="14">14</td><td class="num" data-v="20270731">31/07/27</td><td class="num fen" data-v="20260916">16/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="136">136 m</td><td class="num" data-v="424"><strong>424 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage inclus</i></span></td><td class="annonce" title="Superbe appartement traversant T3 face océan 4*"><a href="https://www.airbnb.fr/rooms/31688407"><span>Superbe appartement traversant T3 face océan 4*</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="364" data-lid="39347076" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20261025">25/10/26</td><td class="num fen" data-v="20260916">16/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="364">364 m</td><td class="num" data-v="49"><strong>49 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="T2 vue sur la pinède, à 1mn de l&#x27;océan"><a href="https://www.airbnb.fr/rooms/39347076"><span>T2 vue sur la pinède, à 1mn de l&#x27;océan</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="242" data-lid="17777500" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261009">09/10/26</td><td class="num fen" data-v="20260916">16/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="242">242 m</td><td class="num" data-v="209"><strong>209 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°1"><a href="https://www.airbnb.fr/rooms/17777500"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°1</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="173" data-lid="647834260519580090" data-ferme=""><td class="num" data-v="5">5</td><td class="num" data-v="20270719">19/07/27</td><td class="num fen" data-v="20260916">15 → 16/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="173">173 m</td><td class="num" data-v="444"><strong>444 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Duplex superbe vue océan, fibre, tv, parking privé"><a href="https://www.airbnb.fr/rooms/647834260519580090"><span>Duplex superbe vue océan, fibre, tv, parking privé</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="173" data-lid="647834260519580090" data-ferme=""><td class="num" data-v="4">4</td><td class="num" data-v="20260928">28/09/26</td><td class="num fen" data-v="20260916">15 → 16/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="173">173 m</td><td class="num" data-v="277"><strong>277 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Duplex superbe vue océan, fibre, tv, parking privé"><a href="https://www.airbnb.fr/rooms/647834260519580090"><span>Duplex superbe vue océan, fibre, tv, parking privé</span></a></td></tr><tr data-type="T4" data-opt="menage linge" data-dist="100" data-lid="1153439089456525853" data-ferme="1"><td class="num" data-v="6">6</td><td class="num" data-v="20261229">29/12/26</td><td class="num fen" data-v="20260915">15/09/26</td><td class="al">T4</td><td class="num" data-v="6">6</td><td class="num" data-v="100">100 m</td><td class="num" data-v="298"><strong>298 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage en option 120 €</i><i class="opt doux">linge 25 €</i></span></td><td class="annonce" title="Splendide appartement, vue mer, dernier étage"><a href="https://www.airbnb.fr/rooms/1153439089456525853"><span>Splendide appartement, vue mer, dernier étage</span></a></td></tr><tr data-type="T3" data-opt="linge" data-dist="62" data-lid="60039" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261127">27/11/26</td><td class="num fen" data-v="20260914">14/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="62">62 m</td><td class="num" data-v="132"><strong>132 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="pleine Vue océan triplex 2ch2sdb WIFI freeParking."><a href="https://www.airbnb.fr/rooms/60039"><span>pleine Vue océan triplex 2ch2sdb WIFI freeParking.</span></a></td></tr><tr data-type="T3" data-opt="linge" data-dist="62" data-lid="60039" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20261120">20/11/26</td><td class="num fen" data-v="20260914">14/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="62">62 m</td><td class="num" data-v="132"><strong>132 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="pleine Vue océan triplex 2ch2sdb WIFI freeParking."><a href="https://www.airbnb.fr/rooms/60039"><span>pleine Vue océan triplex 2ch2sdb WIFI freeParking.</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261016">16/10/26</td><td class="num fen" data-v="20260914">14/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="110"><strong>110 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="1083660089136357580" data-ferme="1"><td class="num" data-v="8">8</td><td class="num" data-v="20261001">01/10/26</td><td class="num fen" data-v="20260914">14/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="95"><strong>95 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">ménage en option 65 €</i><i class="opt doux">linge 9 €</i></span></td><td class="annonce" title="&quot;L&#x27;Été Sans Fin&quot;. 
+Joli T2-balcon face à l&#x27;océan"><i class="bm">Bleu Marine</i><a href="https://www.airbnb.fr/rooms/1083660089136357580"><span>&quot;L&#x27;Été Sans Fin&quot;. 
+Joli T2-balcon face à l&#x27;océan</span></a></td></tr><tr data-type="studio" data-opt="" data-dist="129" data-lid="41165997" data-ferme="1"><td class="num" data-v="3">3</td><td class="num" data-v="20270506">06/05/27</td><td class="num fen" data-v="20260914">13 → 14/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="129">129 m</td><td class="num" data-v="126"><strong>126 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Vue sur l&#x27;océan chez Christophe Apt 82"><a href="https://www.airbnb.fr/rooms/41165997"><span>Vue sur l&#x27;océan chez Christophe Apt 82</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="233" data-lid="17777497" data-ferme="1"><td class="num" data-v="10">10</td><td class="num" data-v="20261016">16/10/26</td><td class="num fen" data-v="20260914">13 → 14/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="233">233 m</td><td class="num" data-v="220"><strong>220 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4"><a href="https://www.airbnb.fr/rooms/17777497"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4</span></a></td></tr><tr data-type="T3" data-opt="" data-dist="244" data-lid="1428770678084560894" data-ferme="1"><td class="num" data-v="5">5</td><td class="num" data-v="20260926">26/09/26</td><td class="num fen" data-v="20260914">13 → 14/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="244">244 m</td><td class="num" data-v="138"><strong>138 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Le Perchoir sur l&#x27;Océan - Lacanau"><a href="https://www.airbnb.fr/rooms/1428770678084560894"><span>Le Perchoir sur l&#x27;Océan - Lacanau</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="433" data-lid="653482193690237186" data-ferme="1"><td class="num" data-v="7">7</td><td class="num" data-v="20260926">26/09/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="433">433 m</td><td class="num" data-v="98"><strong>98 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Mamita 4 appartement escale boisée T2 47m"><a href="https://www.airbnb.fr/rooms/653482193690237186"><span>Mamita 4 appartement escale boisée T2 47m</span></a></td></tr><tr class="flou" data-type="T2" data-opt="" data-dist="364" data-lid="39347076" data-ferme=""><td class="num" data-v="4">4</td><td class="num" data-v="20270506">06/05/27</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="364">364 m</td><td class="num" data-v="80"><strong>80 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="T2 vue sur la pinède, à 1mn de l&#x27;océan"><a href="https://www.airbnb.fr/rooms/39347076"><span>T2 vue sur la pinède, à 1mn de l&#x27;océan</span></a></td></tr><tr data-type="studio" data-opt="linge" data-dist="251" data-lid="52047957" data-ferme="1"><td class="num" data-v="1">1</td><td class="num" data-v="20261024">24/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="251">251 m</td><td class="num" data-v="108"><strong>108 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Studio Superbe vue Ocean, la plage à ses pieds"><a href="https://www.airbnb.fr/rooms/52047957"><span>Studio Superbe vue Ocean, la plage à ses pieds</span></a></td></tr><tr data-type="T3" data-opt="menage linge" data-dist="233" data-lid="17777497" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261009">09/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="233">233 m</td><td class="num" data-v="220"><strong>220 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 90 €</i><i class="opt doux">linge 49 €</i></span></td><td class="annonce" title="T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4"><a href="https://www.airbnb.fr/rooms/17777497"><span>T3 50m²+Terrasse15m²vue mer,6pers,WiFi,Parking,N°4</span></a></td></tr><tr class="flou" data-type="T3" data-opt="caution" data-dist="228" data-lid="15786917" data-ferme=""><td class="num" data-v="3">3</td><td class="num" data-v="20270423">23/04/27</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="228">228 m</td><td class="num" data-v="219"><strong>219 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">caution accès 50 €</i></span></td><td class="annonce" title="Grand appartement front de mer VUE OCÉAN 6 places"><a href="https://www.airbnb.fr/rooms/15786917"><span>Grand appartement front de mer VUE OCÉAN 6 places</span></a></td></tr><tr class="flou" data-type="T3" data-opt="caution" data-dist="228" data-lid="15786917" data-ferme=""><td class="num" data-v="6">6</td><td class="num" data-v="20270328">28/03/27</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="228">228 m</td><td class="num" data-v="207"><strong>207 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">caution accès 50 €</i></span></td><td class="annonce" title="Grand appartement front de mer VUE OCÉAN 6 places"><a href="https://www.airbnb.fr/rooms/15786917"><span>Grand appartement front de mer VUE OCÉAN 6 places</span></a></td></tr><tr data-type="studio" data-opt="" data-dist="228" data-lid="1599217239587592996" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261003">03/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">studio</td><td class="num" data-v="4">4</td><td class="num" data-v="228">228 m</td><td class="num" data-v="96"><strong>96 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="*Charmant studio à 100m de la plage*"><a href="https://www.airbnb.fr/rooms/1599217239587592996"><span>*Charmant studio à 100m de la plage*</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="220" data-lid="1716596462046052288" data-ferme=""><td class="num" data-v="3">3</td><td class="num" data-v="20261015">15/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="220">220 m</td><td class="num" data-v="74"><strong>74 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement vue sur l&#x27;océan avec place de parking"><a href="https://www.airbnb.fr/rooms/1716596462046052288"><span>Appartement vue sur l&#x27;océan avec place de parking</span></a></td></tr><tr class="flou" data-type="T3" data-opt="" data-dist="220" data-lid="1716596462046052288" data-ferme=""><td class="num" data-v="8">8</td><td class="num" data-v="20260930">30/09/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="4">4</td><td class="num" data-v="220">220 m</td><td class="num" data-v="206"><strong>206 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appartement vue sur l&#x27;océan avec place de parking"><a href="https://www.airbnb.fr/rooms/1716596462046052288"><span>Appartement vue sur l&#x27;océan avec place de parking</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="197" data-lid="1340431967997262314" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261011">11/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="197">197 m</td><td class="num" data-v="122"><strong>122 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Appart avec terrasse face à la mer 500m du centre"><a href="https://www.airbnb.fr/rooms/1340431967997262314"><span>Appart avec terrasse face à la mer 500m du centre</span></a></td></tr><tr data-type="T2" data-opt="" data-dist="181" data-lid="1692646964496325865" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261010">10/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="181">181 m</td><td class="num" data-v="142"><strong>142 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Vue océan d’exception, Terrasse, Parking privé "><a href="https://www.airbnb.fr/rooms/1692646964496325865"><span>Vue océan d’exception, Terrasse, Parking privé </span></a></td></tr><tr data-type="T3" data-opt="" data-dist="173" data-lid="647834260519580090" data-ferme="1"><td class="num" data-v="9">9</td><td class="num" data-v="20260919">19/09/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="6">6</td><td class="num" data-v="173">173 m</td><td class="num" data-v="257"><strong>257 €</strong></td><td class="options al"><span class="rien">—</span></td><td class="annonce" title="Duplex superbe vue océan, fibre, tv, parking privé"><a href="https://www.airbnb.fr/rooms/647834260519580090"><span>Duplex superbe vue océan, fibre, tv, parking privé</span></a></td></tr><tr class="flou" data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme=""><td class="num" data-v="4">4</td><td class="num" data-v="20261107">07/11/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="86"><strong>86 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20261020">20/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="94"><strong>94 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr class="flou" data-type="T2" data-opt="menage linge" data-dist="165" data-lid="890570307166519320" data-ferme=""><td class="num" data-v="4">4</td><td class="num" data-v="20260930">30/09/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="165">165 m</td><td class="num" data-v="110"><strong>110 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage 35 €</i><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="Océan&amp;dunes avec Vue imprenable Plage Wifi Parking"><a href="https://www.airbnb.fr/rooms/890570307166519320"><span>Océan&amp;dunes avec Vue imprenable Plage Wifi Parking</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="150" data-lid="623808" data-ferme="1"><td class="num" data-v="9">9</td><td class="num" data-v="20261003">03/10/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="150">150 m</td><td class="num" data-v="99"><strong>99 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage</i><i class="opt doux">linge 85 €</i></span></td><td class="annonce" title="Duplex sunset pleine Vue Ocean+Parking+wifi fibre."><a href="https://www.airbnb.fr/rooms/623808"><span>Duplex sunset pleine Vue Ocean+Parking+wifi fibre.</span></a></td></tr><tr data-type="T2" data-opt="menage linge" data-dist="150" data-lid="623808" data-ferme="1"><td class="num" data-v="7">7</td><td class="num" data-v="20260925">25/09/26</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T2</td><td class="num" data-v="4">4</td><td class="num" data-v="150">150 m</td><td class="num" data-v="99"><strong>99 €</strong></td><td class="options al"><span class="lot"><i class="opt fort">ménage</i><i class="opt doux">linge 85 €</i></span></td><td class="annonce" title="Duplex sunset pleine Vue Ocean+Parking+wifi fibre."><a href="https://www.airbnb.fr/rooms/623808"><span>Duplex sunset pleine Vue Ocean+Parking+wifi fibre.</span></a></td></tr><tr data-type="T3" data-opt="linge" data-dist="62" data-lid="60039" data-ferme="1"><td class="num" data-v="2">2</td><td class="num" data-v="20270505">05/05/27</td><td class="num fen" data-v="20260913">07 → 13/09/26</td><td class="al">T3</td><td class="num" data-v="5">5</td><td class="num" data-v="62">62 m</td><td class="num" data-v="176"><strong>176 €</strong></td><td class="options al"><span class="lot"><i class="opt doux">linge 10 €</i></span></td><td class="annonce" title="pleine Vue océan triplex 2ch2sdb WIFI freeParking."><a href="https://www.airbnb.fr/rooms/60039"><span>pleine Vue océan triplex 2ch2sdb WIFI freeParking.</span></a></td></tr></tbody></table></div>
+<div class="caveat"><p>331 nuits supplémentaires ont été écartées du décompte : elles se
+sont bloquées juste à côté d'un séjour déjà en place, ce qui signale une
+prolongation ou une durée minimale rendant la nuit restante inréservable,
+non une réservation nouvelle.</p>
+<p><strong>73 nuits ont également été écartées comme motif de calendrier.</strong> Elles forment 28 blocs de même durée, bloqués d'un seul coup sur une même annonce — soit plusieurs créneaux identiques revenant le même jour de la semaine, soit une salve de cinq créneaux séparés ou plus dans le même relevé. Un propriétaire qui bloque son calendrier ne reçoit pas de voyageur : il applique une règle, ou synchronise depuis un autre canal. Les compter aurait gonflé le décompte sans qu'aucun client n'existe.</p></div>
+</section>
+<footer><p>Relevé du 27 septembre 2026 à
+21h59. Les calendriers du segment sont relus six fois par jour.</p>
+</footer></div>
+<script>
+(function () {
+  const table = document.querySelector('table');
+  if (!table) return;
+  const corps = table.tBodies[0];
+  const rangs = [...corps.rows];
+  // Le tableau arrive déjà trié par date de réservation décroissante : on
+  // le dit à l'état pour que la flèche s'affiche et que le premier clic
+  // inverse au lieu de retrier dans le même sens.
+  const COL_RESA = 2;
+  const etat = {type: '', opt: '', dist: '300', col: COL_RESA, sens: -1};
+
+  // --- tri
+  const entetes = [...table.tHead.rows[0].cells];
+  if (entetes[COL_RESA]) entetes[COL_RESA].dataset.tri = 'desc';
+  entetes.forEach((th, i) => {
+    if (i === entetes.length - 1) return;      // le titre ne se trie pas
+    th.tabIndex = 0;
+    th.classList.add('triable');
+    const trier = () => {
+      etat.sens = etat.col === i ? -etat.sens : 1;
+      etat.col = i;
+      entetes.forEach(h => h.removeAttribute('data-tri'));
+      th.dataset.tri = etat.sens > 0 ? 'asc' : 'desc';
+      const cle = r => {
+        const c = r.cells[i];
+        const v = c.dataset.v;
+        return v !== undefined ? parseFloat(v)
+                               : c.textContent.trim().toLowerCase();
+      };
+      rangs.sort((a, b) => {
+        const x = cle(a), y = cle(b);
+        if (x === y) return 0;
+        return (x > y ? 1 : -1) * etat.sens;
+      });
+      rangs.forEach(r => corps.appendChild(r));
+    };
+    th.addEventListener('click', trier);
+    th.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trier(); }
+    });
+  });
+
+  // --- colonne repliable
+  const voir = document.getElementById('voirRes');
+  if (voir) {
+    const majCol = () => table.classList.toggle('sans-res', !voir.checked);
+    voir.addEventListener('change', majCol);
+    majCol();
+  }
+
+  // --- filtres
+  //
+  // Les chiffres de tête suivent le filtre. Sans ça, élargir à 500 m ferait
+  // apparaitre des lignes que la médiane affichée ignorerait : le lecteur
+  // croirait lire la médiane de ce qu'il voit. Le quantile est le même calcul
+  // linéaire que côté Python, pour que les deux ne divergent jamais.
+  const compte = document.getElementById('compte');
+  const el = id => document.getElementById(id);
+  const quantile = (v, part) => {
+    if (!v.length) return null;
+    const i = (v.length - 1) * part;
+    const lo = Math.floor(i), hi = Math.min(lo + 1, v.length - 1);
+    return v[lo] + (v[hi] - v[lo]) * (i - lo);
+  };
+  const euros = x => x === null ? '—' : `${Math.round(x)} €`;
+  const appliquer = () => {
+    let n = 0, nuits = 0;
+    const annonces = new Set(), prix = [];
+    rangs.forEach(r => {
+      const okType = !etat.type || r.dataset.type === etat.type;
+      const okOpt = !etat.opt
+        || (etat.opt === 'rien' ? r.dataset.opt === ''
+                                : (r.dataset.opt || '').includes(etat.opt));
+      const okDist = parseInt(r.dataset.dist || 0, 10) < parseInt(etat.dist, 10);
+      const montre = okType && okOpt && okDist;
+      r.hidden = !montre;
+      if (montre) {
+        n++;
+        nuits += parseInt(r.cells[0].dataset.v || 0, 10);
+        annonces.add(r.dataset.lid);
+        // Seuls les prix fermes pèsent sur la médiane, comme côté Python :
+        // les lignes grisées portent un relevé trop éloigné des dates.
+        if (r.dataset.ferme) prix.push(parseFloat(r.cells[6].dataset.v));
+      }
+    });
+    prix.sort((a, b) => a - b);
+    const visibles = rangs.filter(r => !r.hidden).length;
+    compte.textContent = visibles === rangs.length
+      ? `${n} séjours, ${nuits} nuits`
+      : `${n} séjours sur ${rangs.length}, ${nuits} nuits`;
+    el('tSejours').textContent = n;
+    el('tNuits').textContent = nuits;
+    el('tMoy').textContent = n
+      ? `${(nuits / n).toFixed(1)} par séjour en moyenne` : '—';
+    el('tAnnonces').textContent = annonces.size;
+    const btn = document.querySelector('button.f[data-f="dist"].on');
+    if (btn) el('tSegment').textContent = btn.dataset.seg;
+    el('tMed').textContent = euros(quantile(prix, .5));
+    el('tQuart').textContent = prix.length
+      ? `${Math.round(quantile(prix, .25))}–${Math.round(quantile(prix, .75))} €` : '—';
+    el('tEtendue').textContent = prix.length
+      ? `${Math.round(prix[0])}–${Math.round(prix[prix.length - 1])} €` : '—';
+  };
+  document.querySelectorAll('button.f').forEach(b => {
+    b.addEventListener('click', () => {
+      const f = b.dataset.f;
+      etat[f] = b.dataset.v;
+      document.querySelectorAll(`button.f[data-f="${f}"]`)
+              .forEach(o => o.classList.toggle('on', o === b));
+      appliquer();
+    });
+  });
+  appliquer();
+})();
+</script>
