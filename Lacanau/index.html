@@ -237,7 +237,7 @@ tr.flou td strong { font-weight:500; }
 <header class="masthead">
   <p class="eyebrow">Veille · vue dégagée sur l'océan
   <span class="maj">mis à jour le 28 septembre à
-  08h59</span></p>
+  09h04</span></p>
   <h1>Baromètre des réservations</h1>
   <p class="standfirst">Les séjours qui ont été réservés entre le
   7 et le 28 septembre sur les
@@ -355,17 +355,20 @@ pas à l'œil.</p>
 
 <h3 class="serie">À quel prix</h3>
 <p class="measure">Le prix médian par nuit des séjours qui couvrent chaque date.
-Là où rien n'est réservé, il n'y a rien à afficher : la barre est absente, elle
-ne vaut pas zéro.</p>
+Une courbe et non des barres : un prix est un niveau, pas une quantité qui
+s'accumule. <strong>Elle s'interrompt là où rien n'est réservé</strong> — relier
+deux dates séparées par un creux inventerait un prix pour les nuits vides. Une
+date isolée apparaît comme un point. Les week-ends sont marqués en orange.</p>
 <figure>
   <svg id="histPrix" viewBox="0 0 1000 160" role="img"
-       aria-label="Prix médian par nuit, par date"><line x1="42" x2="992" y1="120.0" y2="120.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="124.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">0 &#8364;</text><line x1="42" x2="992" y1="66.0" y2="66.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="70.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">96 &#8364;</text><line x1="42" x2="992" y1="12.0" y2="12.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="16.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">193 &#8364;</text><rect x="42.00" y="42.0" width="14.57" height="78.0" rx="2.0" fill="var(--s2)"/><rect x="57.57" y="42.0" width="14.57" height="78.0" rx="2.0" fill="var(--s2)"/><rect x="73.15" y="41.4" width="14.57" height="78.6" rx="2.0" fill="var(--s2)"/><rect x="88.72" y="50.9" width="14.57" height="69.1" rx="2.0" fill="var(--s2)"/><rect x="104.30" y="25.9" width="14.57" height="94.1" rx="2.0" fill="var(--s2)"/><rect x="119.87" y="41.4" width="14.57" height="78.6" rx="2.0" fill="var(--mark)"/><rect x="135.44" y="41.4" width="14.57" height="78.6" rx="2.0" fill="var(--mark)"/><rect x="151.02" y="26.7" width="14.57" height="93.3" rx="2.0" fill="var(--s2)"/><rect x="166.59" y="41.4" width="14.57" height="78.6" rx="2.0" fill="var(--s2)"/><rect x="182.16" y="58.7" width="14.57" height="61.3" rx="2.0" fill="var(--s2)"/><rect x="197.74" y="61.6" width="14.57" height="58.4" rx="2.0" fill="var(--s2)"/><rect x="213.31" y="19.1" width="14.57" height="100.9" rx="2.0" fill="var(--s2)"/><rect x="228.89" y="33.2" width="14.57" height="86.8" rx="2.0" fill="var(--mark)"/><rect x="244.46" y="51.7" width="14.57" height="68.3" rx="2.0" fill="var(--mark)"/><rect x="260.03" y="57.8" width="14.57" height="62.2" rx="2.0" fill="var(--s2)"/><rect x="275.61" y="59.8" width="14.57" height="60.2" rx="2.0" fill="var(--s2)"/><rect x="291.18" y="74.5" width="14.57" height="45.5" rx="2.0" fill="var(--s2)"/><rect x="306.75" y="74.5" width="14.57" height="45.5" rx="2.0" fill="var(--s2)"/><rect x="322.33" y="38.4" width="14.57" height="81.6" rx="2.0" fill="var(--s2)"/><rect x="337.90" y="18.1" width="14.57" height="101.9" rx="2.0" fill="var(--mark)"/><rect x="353.48" y="15.0" width="14.57" height="105.0" rx="2.0" fill="var(--mark)"/><rect x="369.05" y="12.0" width="14.57" height="108.0" rx="2.0" fill="var(--s2)"/><rect x="384.62" y="39.8" width="14.57" height="80.2" rx="2.0" fill="var(--s2)"/><rect x="400.20" y="65.7" width="14.57" height="54.3" rx="2.0" fill="var(--s2)"/><rect x="415.77" y="38.8" width="14.57" height="81.2" rx="2.0" fill="var(--s2)"/><rect x="431.34" y="65.7" width="14.57" height="54.3" rx="2.0" fill="var(--s2)"/><rect x="446.92" y="46.3" width="14.57" height="73.7" rx="2.0" fill="var(--mark)"/><rect x="462.49" y="34.4" width="14.57" height="85.6" rx="2.0" fill="var(--mark)"/><rect x="478.07" y="36.0" width="14.57" height="84.0" rx="2.0" fill="var(--s2)"/><rect x="493.64" y="36.0" width="14.57" height="84.0" rx="2.0" fill="var(--s2)"/><rect x="509.21" y="36.0" width="14.57" height="84.0" rx="2.0" fill="var(--s2)"/><rect x="524.79" y="43.7" width="14.57" height="76.3" rx="2.0" fill="var(--s2)"/><rect x="540.36" y="43.7" width="14.57" height="76.3" rx="2.0" fill="var(--s2)"/><rect x="555.93" y="51.3" width="14.57" height="68.7" rx="2.0" fill="var(--mark)"/><rect x="727.25" y="62.0" width="14.57" height="58.0" rx="2.0" fill="var(--s2)"/><rect x="742.82" y="62.0" width="14.57" height="58.0" rx="2.0" fill="var(--s2)"/><rect x="758.39" y="62.0" width="14.57" height="58.0" rx="2.0" fill="var(--s2)"/><rect x="805.11" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="820.69" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="836.26" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="851.84" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="867.41" y="56.8" width="14.57" height="63.2" rx="2.0" fill="var(--s2)"/><rect x="882.98" y="56.8" width="14.57" height="63.2" rx="2.0" fill="var(--mark)"/><rect x="898.56" y="56.8" width="14.57" height="63.2" rx="2.0" fill="var(--mark)"/><rect x="914.13" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="929.70" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="945.28" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="960.85" y="67.7" width="14.57" height="52.3" rx="2.0" fill="var(--s2)"/><rect x="976.43" y="56.8" width="14.57" height="63.2" rx="2.0" fill="var(--s2)"/><line x1="88.7" x2="88.7" y1="120" y2="125" stroke="var(--hairline-strong)" stroke-width="1"/><text x="88.7" y="140" text-anchor="middle" font-size="11" fill="var(--ink-soft)">oct.</text><line x1="571.5" x2="571.5" y1="120" y2="125" stroke="var(--hairline-strong)" stroke-width="1"/><text x="571.5" y="140" text-anchor="middle" font-size="11" fill="var(--ink-soft)">nov.</text><line x1="42" x2="992" y1="120" y2="120" stroke="var(--hairline-strong)" stroke-width="1"/></svg>
+       aria-label="Prix médian par nuit, par date"><line x1="42" x2="992" y1="120.0" y2="120.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="124.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">0 &#8364;</text><line x1="42" x2="992" y1="66.0" y2="66.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="70.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">96 &#8364;</text><line x1="42" x2="992" y1="12.0" y2="12.0" stroke="var(--hairline)" stroke-width="1"/><text x="34" y="16.0" text-anchor="end" font-size="11" fill="var(--ink-faint)">193 &#8364;</text><path d="M49.79,42.0 L65.36,42.0 L80.93,41.4 L96.51,50.9 L112.08,25.9 L127.66,41.4 L143.23,41.4 L158.80,26.7 L174.38,41.4 L189.95,58.7 L205.52,61.6 L221.10,19.1 L236.67,33.2 L252.25,51.7 L267.82,57.8 L283.39,59.8 L298.97,74.5 L314.54,74.5 L330.11,38.4 L345.69,18.1 L361.26,15.0 L376.84,12.0 L392.41,39.8 L407.98,65.7 L423.56,38.8 L439.13,65.7 L454.70,46.3 L470.28,34.4 L485.85,36.0 L501.43,36.0 L517.00,36.0 L532.57,43.7 L548.15,43.7 L563.72,51.3" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M735.03,62.0 L750.61,62.0 L766.18,62.0" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><path d="M812.90,67.7 L828.48,67.7 L844.05,67.7 L859.62,67.7 L875.20,56.8 L890.77,56.8 L906.34,56.8 L921.92,67.7 L937.49,67.7 L953.07,67.7 L968.64,67.7 L984.21,56.8" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="127.66" cy="41.4" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="143.23" cy="41.4" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="236.67" cy="33.2" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="252.25" cy="51.7" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="345.69" cy="18.1" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="361.26" cy="15.0" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="454.70" cy="46.3" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="470.28" cy="34.4" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="563.72" cy="51.3" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="890.77" cy="56.8" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><circle cx="906.34" cy="56.8" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/><line x1="88.7" x2="88.7" y1="120" y2="125" stroke="var(--hairline-strong)" stroke-width="1"/><text x="88.7" y="140" text-anchor="middle" font-size="11" fill="var(--ink-soft)">oct.</text><line x1="571.5" x2="571.5" y1="120" y2="125" stroke="var(--hairline-strong)" stroke-width="1"/><text x="571.5" y="140" text-anchor="middle" font-size="11" fill="var(--ink-soft)">nov.</text><line x1="42" x2="992" y1="120" y2="120" stroke="var(--hairline-strong)" stroke-width="1"/></svg>
   <div class="infobulle" id="prixBulle" hidden></div>
   <figcaption>Même axe des dates que le graphique du dessus, mais une échelle
   qui lui est propre — les deux cadres sont séparés exprès, un compte et un
   prix ne se superposent pas. Seuls les prix fermes comptent dans la médiane :
   les séjours dont le relevé de prix est trop éloigné des dates en sont exclus,
-  comme ils le sont du prix médian affiché en tête.</figcaption>
+  comme ils le sont du prix médian affiché en tête. Sur la portée d'un an, les
+  points de week-end disparaissent — ils se chevaucheraient.</figcaption>
 </figure>
 </section>
 
@@ -443,7 +446,7 @@ non une réservation nouvelle.</p>
 <p><strong>73 nuits ont également été écartées comme motif de calendrier.</strong> Elles forment 28 blocs de même durée, bloqués d'un seul coup sur une même annonce — soit plusieurs créneaux identiques revenant le même jour de la semaine, soit une salve de cinq créneaux séparés ou plus dans le même relevé. Un propriétaire qui bloque son calendrier ne reçoit pas de voyageur : il applique une règle, ou synchronise depuis un autre canal. Les compter aurait gonflé le décompte sans qu'aucun client n'existe.</p></div>
 </section>
 <footer><p>Relevé du 28 septembre 2026 à
-08h59. Les calendriers du segment sont relus six fois par jour.</p>
+09h04. Les calendriers du segment sont relus six fois par jour.</p>
 </footer></div>
 <script>const SEJOURS = [["2026-10-12",14,63,"T2","",81],["2026-10-04",6,89,"T4","menage linge",193],["2026-11-16",14,165,"T2","menage linge",93],["2026-10-26",2,165,"T2","menage linge",100],["2027-04-19",7,307,"T3","",0],["2027-03-21",5,62,"T3","linge",0],["2026-10-06",3,157,"T2","menage",0],["2026-09-27",5,157,"T2","menage",106],["2026-10-02",2,244,"T3","",188],["2027-07-17",14,165,"T3","",0],["2027-06-19",14,189,"T2","",0],["2026-09-27",3,307,"T3","",0],["2026-10-04",4,83,"T3","menage linge",226],["2026-09-28",5,189,"T2","",0],["2026-09-24",9,220,"T2","",148],["2026-09-24",7,104,"T3","menage linge",164],["2026-10-30",2,181,"T2","linge",0],["2026-10-21",3,228,"studio","",97],["2026-12-31",2,189,"T2","linge",117],["2026-10-28",4,62,"T3","linge",123],["2026-10-25",6,233,"T3","menage linge",150],["2027-05-23",5,251,"T3","",223],["2026-10-17",6,89,"T4","menage linge",193],["2027-05-29",7,63,"T2","",0],["2026-09-26",5,233,"T3","menage linge",149],["2026-10-05",5,251,"studio","linge",0],["2026-10-19",2,165,"T3","",0],["2026-10-10",4,251,"studio","linge",108],["2027-05-05",4,173,"studio","menage",97],["2026-10-09",3,244,"T3","",168],["2026-10-12",2,150,"T2","menage linge",114],["2026-10-01",5,104,"T3","menage linge",202],["2026-10-07",3,165,"T2","menage linge",110],["2026-10-02",2,83,"T3","menage linge",226],["2026-10-29",2,220,"T3","",74],["2026-09-27",3,228,"studio","",100],["2026-10-24",7,244,"T3","",156],["2026-10-16",3,244,"T3","",182],["2026-09-28",9,242,"T3","menage linge",140],["2026-11-11",3,165,"T2","menage linge",104],["2027-07-31",14,136,"T3","menage",0],["2026-10-25",5,364,"T2","",49],["2026-10-09",2,242,"T3","menage linge",209],["2027-07-19",5,173,"T3","",0],["2026-09-28",4,173,"T3","",0],["2026-12-29",6,100,"T4","menage linge",298],["2026-11-27",3,62,"T3","linge",132],["2026-11-20",3,62,"T3","linge",132],["2026-10-16",2,165,"T2","menage linge",110],["2026-10-01",8,165,"T2","menage linge",95],["2027-05-06",3,129,"studio","",126],["2026-10-16",10,233,"T3","menage linge",220],["2026-09-26",5,244,"T3","",138],["2026-09-26",7,433,"T2","",98],["2027-05-06",4,364,"T2","",0],["2026-10-24",1,251,"studio","linge",108],["2026-10-09",2,233,"T3","menage linge",220],["2027-04-23",3,228,"T3","caution",0],["2027-03-28",6,228,"T3","caution",0],["2026-10-03",2,228,"studio","",96],["2026-10-15",3,220,"T3","",0],["2026-09-30",8,220,"T3","",0],["2026-10-11",2,197,"T2","",122],["2026-10-10",2,181,"T2","",142],["2026-11-07",4,165,"T2","menage linge",0],["2026-10-20",2,165,"T2","menage linge",94],["2026-09-30",4,165,"T2","menage linge",0],["2026-10-03",9,150,"T2","menage linge",99],["2026-09-25",7,150,"T2","menage linge",99],["2027-05-05",2,62,"T3","linge",176]];</script>
 <script>
@@ -598,21 +601,38 @@ non une réservation nouvelle.</p>
     const haut = reels.length ? Math.max(...reels) : 1;
     const larg = (HX1 - HX0) / jours;
     const ech = (PY1 - PY0) / haut;
-    const ecart = larg > 3 ? 1 : 0;
+    const px = i => HX0 + (i + .5) * larg;
+    const py = v => PY1 - v * ech;
     const out = [];
     [0, .5, 1].forEach(part => {
-      const v = haut * part, y = PY1 - v * ech;
+      const v = haut * part, y = py(v);
       out.push(`<line x1="${HX0}" x2="${HX1}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--hairline)" stroke-width="1"/>`);
       out.push(`<text x="${HX0 - 8}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--ink-faint)">${Math.round(v)} €</text>`);
     });
+    // Tronçons continus : la courbe ne saute jamais par-dessus un trou.
+    const tronc = []; let cour = [];
     vals.forEach((v, i) => {
-      if (!v) return;
-      const j = new Date(debut.getTime() + i * 86400000);
-      const h = v * ech, x = HX0 + i * larg;
-      const w = Math.max(.8, larg - ecart), r = Math.min(2, w / 2);
-      const wk = j.getDay() === 0 || j.getDay() === 6;
-      out.push(`<rect x="${x.toFixed(2)}" y="${(PY1 - h).toFixed(1)}" width="${w.toFixed(2)}" height="${h.toFixed(1)}" rx="${r.toFixed(1)}" fill="${wk ? 'var(--mark)' : 'var(--s2)'}"/>`);
+      if (v) cour.push(i);
+      else if (cour.length) { tronc.push(cour); cour = []; }
     });
+    if (cour.length) tronc.push(cour);
+    tronc.forEach(seg => {
+      if (seg.length === 1) {
+        const i = seg[0];
+        out.push(`<circle cx="${px(i).toFixed(2)}" cy="${py(vals[i]).toFixed(1)}" r="2.2" fill="var(--s2)"/>`);
+        return;
+      }
+      const d = seg.map((i, k) => (k ? 'L' : 'M') + `${px(i).toFixed(2)},${py(vals[i]).toFixed(1)}`).join(' ');
+      out.push(`<path d="${d}" fill="none" stroke="var(--s2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`);
+    });
+    if (larg >= 6) {
+      vals.forEach((v, i) => {
+        if (!v) return;
+        const j = new Date(debut.getTime() + i * 86400000);
+        if (j.getDay() !== 0 && j.getDay() !== 6) return;
+        out.push(`<circle cx="${px(i).toFixed(2)}" cy="${py(v).toFixed(1)}" r="3" fill="var(--mark)" stroke="var(--surface)" stroke-width="1.5"/>`);
+      });
+    }
     for (let i = 0; i < jours; i++) {
       const j = new Date(debut.getTime() + i * 86400000);
       if (j.getDate() !== 1) continue;
