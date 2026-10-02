@@ -77,6 +77,20 @@ ol.steps li::before{
 .rules strong{font-weight:600}
 .note{color:var(--muted);font-size:13.5px;margin:12px 0 0}
 a{color:var(--curve)}
+
+/* Documentation */
+.docs{display:flex;flex-direction:column;gap:10px}
+.doc{
+  display:flex;flex-direction:column;gap:3px;text-decoration:none;color:inherit;
+  background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);padding:14px 18px;
+}
+.doc:hover{border-color:var(--curve)}
+.doc:focus-visible{outline:2px solid var(--curve);outline-offset:3px}
+.doc .title{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:19px;line-height:1.2;color:var(--curve)}
+.doc .title::after{content:" ↗";font-size:.8em}
+.doc .what{color:var(--muted);font-size:13.5px}
+
 footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font-size:12px}
 </style>
 </head>
@@ -141,8 +155,22 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
   </section>
 
   <section>
-    <h2>Pour aller plus loin</h2>
-    <p>La bibliothèque du robot, sa documentation et les outils sont sur GitHub : <a href="https://github.com/moogly-jungle/TeachingHolonomousRobot">TeachingHolonomousRobot</a>. Commencez par la documentation du lidar, dans <code>docs/lidar.md</code>.</p>
+    <h2>Documentation</h2>
+    <div class="docs">
+      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/docs/lidar.md">
+        <span class="title">Le lidar</span>
+        <span class="what">Lire un scan, conventions d'angles et de distances, exemples à copier, pièges courants.</span>
+      </a>
+      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/decouverte_robot.ipynb">
+        <span class="title">Carnet de découverte</span>
+        <span class="what">Le carnet des premiers pas, à lire en ligne : batterie, lidar et caméra, sans bouger les roues.</span>
+      </a>
+      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot">
+        <span class="title">Le dépôt du projet</span>
+        <span class="what">Le matériel du robot, la bibliothèque <code>holorobot</code>, les outils et la préparation des Raspberry Pi.</span>
+      </a>
+    </div>
+    <p class="note">D'autres pages suivront, pour les moteurs et la caméra.</p>
   </section>
 
   <footer>Fait maison. JupyterLab est joint par un tunnel chiffré : le robot n'est relié à aucun autre réseau que le sien.</footer>
