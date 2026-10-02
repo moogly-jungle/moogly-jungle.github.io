@@ -79,17 +79,25 @@ ol.steps li::before{
 a{color:var(--curve)}
 
 /* Documentation */
+h3{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:19px;margin:22px 0 10px;line-height:1.2}
+h3:first-of-type{margin-top:4px}
+.parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:12px}
+.part{border:1px solid var(--rule);border-radius:8px;padding:12px 16px;display:flex;flex-direction:column;gap:3px}
+.part .pname{font-weight:600;font-size:14px}
+.part .pdesc{color:var(--muted);font-size:13.5px}
 .docs{display:flex;flex-direction:column;gap:10px}
 .doc{
   display:flex;flex-direction:column;gap:3px;text-decoration:none;color:inherit;
   background:var(--surface);border:1px solid var(--rule);border-radius:10px;
   box-shadow:var(--shadow);padding:14px 18px;
 }
-.doc:hover{border-color:var(--curve)}
-.doc:focus-visible{outline:2px solid var(--curve);outline-offset:3px}
+a.doc:hover{border-color:var(--curve)}
+a.doc:focus-visible{outline:2px solid var(--curve);outline-offset:3px}
 .doc .title{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:19px;line-height:1.2;color:var(--curve)}
-.doc .title::after{content:" ↗";font-size:.8em}
+a.doc .title::after{content:" ↗";font-size:.8em}
 .doc .what{color:var(--muted);font-size:13.5px}
+.doc.soon{box-shadow:none;background:transparent;border-style:dashed}
+.doc.soon .title{color:var(--muted)}
 
 footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font-size:12px}
 </style>
@@ -150,27 +158,54 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <ul class="rules">
       <li><strong>Un capteur, un programme.</strong> Le lidar, la caméra et les moteurs ne servent qu'à un programme à la fois : fermez ce que vous ouvrez (<code>with</code>, <code>close()</code>), ou redémarrez le noyau (menu <em>Kernel</em>) avant de relancer.</li>
       <li><strong>Avant de faire rouler le robot</strong>, posez-le sur sa cale ou au sol dans un espace dégagé, avec quelqu'un à côté. Pour tout arrêter : menu <em>Kernel</em> → <em>Interrupt Kernel</em>.</li>
-      <li><strong>La batterie</strong> ne doit jamais descendre sous 10,4 V : surveillez sa tension et faites-la recharger avant d'atteindre ce seuil.</li>
+      <li><strong>La batterie</strong> ne doit jamais descendre sous 10,4&nbsp;V : surveillez sa tension et faites-la recharger avant d'atteindre ce seuil.</li>
     </ul>
   </section>
 
   <section>
     <h2>Documentation</h2>
+
+    <h3>Le robot</h3>
+    <p>Un robot <strong>holonome</strong> : grâce à ses roues mecanum, il peut avancer, glisser sur le côté et tourner sur lui-même, et même faire les trois à la fois.</p>
+    <div class="parts">
+      <div class="part">
+        <span class="pname">Roues et moteurs</span>
+        <span class="pdesc">4 roues mecanum, chacune entraînée par un moteur Dynamixel MX-12W. Les moteurs sont chaînés sur un même câble : on leur donne une vitesse, ils renvoient leur position, leur tension et leur température.</span>
+      </div>
+      <div class="part">
+        <span class="pname">Raspberry Pi 4</span>
+        <span class="pdesc">L'ordinateur du robot. Il fait tourner JupyterLab et vos programmes, et commande les moteurs, le lidar et la caméra.</span>
+      </div>
+      <div class="part">
+        <span class="pname">Lidar</span>
+        <span class="pdesc">YDLidar X4, à l'arrière. Un laser qui tourne environ 7 fois par seconde et mesure les distances tout autour du robot, de 12&nbsp;cm à 10&nbsp;m.</span>
+      </div>
+      <div class="part">
+        <span class="pname">Caméra</span>
+        <span class="pdesc">Intel RealSense D435i, à l'avant. Une image couleur et une carte de profondeur, qui donne la distance de chaque pixel, plus une centrale inertielle.</span>
+      </div>
+      <div class="part">
+        <span class="pname">Batterie</span>
+        <span class="pdesc">3 éléments Li-ion en série, environ 11&nbsp;V. Elle alimente directement les moteurs, et la Raspberry Pi par un convertisseur 5&nbsp;V.</span>
+      </div>
+    </div>
+    <p class="note">Tout le code du robot, la bibliothèque <code>holorobot</code>, les outils et les carnets, est dans le dépôt <a href="https://github.com/moogly-jungle/TeachingHolonomousRobot">TeachingHolonomousRobot</a>.</p>
+
+    <h3>Élément par élément</h3>
     <div class="docs">
       <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/docs/lidar.md">
         <span class="title">Le lidar</span>
         <span class="what">Lire un scan, conventions d'angles et de distances, exemples à copier, pièges courants.</span>
       </a>
-      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/decouverte_robot.ipynb">
-        <span class="title">Carnet de découverte</span>
-        <span class="what">Le carnet des premiers pas, à lire en ligne : batterie, lidar et caméra, sans bouger les roues.</span>
-      </a>
-      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot">
-        <span class="title">Le dépôt du projet</span>
-        <span class="what">Le matériel du robot, la bibliothèque <code>holorobot</code>, les outils et la préparation des Raspberry Pi.</span>
-      </a>
+      <div class="doc soon">
+        <span class="title">Les moteurs</span>
+        <span class="what">À venir : faire tourner les roues, déplacer le robot dans toutes les directions, arrêt de sécurité.</span>
+      </div>
+      <div class="doc soon">
+        <span class="title">La caméra</span>
+        <span class="what">À venir : image couleur, carte de profondeur et centrale inertielle.</span>
+      </div>
     </div>
-    <p class="note">D'autres pages suivront, pour les moteurs et la caméra.</p>
   </section>
 
   <footer>Fait maison. JupyterLab est joint par un tunnel chiffré : le robot n'est relié à aucun autre réseau que le sien.</footer>
