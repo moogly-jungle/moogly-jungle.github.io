@@ -114,10 +114,10 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
   <section>
     <h2>Votre robot</h2>
     <div class="robots">
-      <a class="robot" href="https://holobot1.tail5610aa.ts.net/" target="_blank" rel="noopener">
+      <a class="robot" href="https://holobot1.tail5610aa.ts.net/lab/tree/notebooks" target="_blank" rel="noopener">
         <span class="name">Robot 1</span>
         <span class="addr">holobot1.<wbr>tail5610aa.<wbr>ts.net</span>
-        <span class="state">Ouvrir JupyterLab</span>
+        <span class="state">Ouvrir les carnets</span>
       </a>
       <div class="robot soon">
         <span class="name">Robot 2</span>
@@ -147,7 +147,7 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <h2>Premiers pas</h2>
     <ol class="steps">
       <li><span>Cliquez sur le robot de votre groupe et entrez le mot de passe.</span></li>
-      <li><span>Dans JupyterLab, ouvrez le dossier <code>notebooks</code>, puis le carnet <code>decouverte_robot.ipynb</code>.</span></li>
+      <li><span>JupyterLab s'ouvre sur le dossier <code>notebooks</code> : ouvrez le carnet <code>decouverte_robot.ipynb</code> (voir les feuilles Jupyter plus bas).</span></li>
       <li><span>Exécutez les cellules une par une avec <kbd>Maj</kbd> + <kbd>Entrée</kbd> : la batterie, le scan du lidar et l'image de la caméra s'affichent sous chaque cellule. Le code tourne sur le robot, pas sur votre ordinateur.</span></li>
       <li><span>Enregistrez régulièrement avec <kbd>Ctrl</kbd> + <kbd>S</kbd> : vos carnets restent sur le robot de votre groupe.</span></li>
     </ol>
@@ -160,6 +160,18 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
       <li><strong>Avant de faire rouler le robot</strong>, posez-le sur sa cale ou au sol dans un espace dégagé, avec quelqu'un à côté. Pour tout arrêter : menu <em>Kernel</em> → <em>Interrupt Kernel</em>.</li>
       <li><strong>La batterie</strong> ne doit jamais descendre sous 10,4&nbsp;V : surveillez sa tension et faites-la recharger avant d'atteindre ce seuil.</li>
     </ul>
+  </section>
+
+  <section>
+    <h2>Feuilles Jupyter</h2>
+    <p>Elles sont déjà dans le dossier <code>notebooks</code> de votre robot : ouvrez-les depuis JupyterLab pour les exécuter. Les liens ci-dessous les montrent en lecture seule, sur GitHub.</p>
+    <div class="docs">
+      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/decouverte_robot.ipynb">
+        <span class="title">Carnet de découverte</span>
+        <span class="what"><code>decouverte_robot.ipynb</code> : lire la batterie, faire un scan du lidar et prendre une image avec la caméra, sans bouger les roues.</span>
+      </a>
+    </div>
+    <p class="note">D'autres feuilles viendront au fil du projet.</p>
   </section>
 
   <section>
