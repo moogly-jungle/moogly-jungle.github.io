@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Projet robot holonome : accès aux robots et premiers pas.">
+<meta name="robots" content="noindex, nofollow">
+<title>Robot holonome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap">
+<style>
+:root{
+  --paper:#FAF9F5; --surface:#FFFFFF; --ink:#1A1C2B; --muted:#5C6076;
+  --rule:#E4E1D8; --curve:#2A3F9D; --alpha:#C1443C; --ok:#2E7D4F;
+  --shadow:0 1px 2px rgba(26,28,43,.06), 0 8px 24px -14px rgba(26,28,43,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131520; --surface:#1A1D2A; --ink:#E9EAF1; --muted:#9BA0B6;
+    --rule:#2B2F40; --curve:#93A8FF; --alpha:#EC7A70; --ok:#6FCF97;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.7);
+  }
+}
+*{box-sizing:border-box}
+body{
+  background:var(--paper); color:var(--ink); margin:0;
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:64px 24px 48px;display:flex;flex-direction:column;gap:34px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--alpha);font-weight:600}
+.eyebrow a{color:inherit;text-decoration:none}
+.eyebrow a:hover{text-decoration:underline}
+h1{
+  font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:34px;
+  line-height:1.1;margin:6px 0 0;letter-spacing:-.01em;text-wrap:balance;
+}
+h2{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:23px;margin:0 0 12px;line-height:1.2}
+.intro{color:var(--muted);margin:10px 0 0;max-width:56ch}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.92em}
+kbd{
+  font-family:"IBM Plex Sans",sans-serif;font-size:12.5px;padding:1px 6px;border-radius:5px;
+  border:1px solid var(--rule);border-bottom-width:2px;background:var(--surface);white-space:nowrap;
+}
+
+/* Robots */
+.robots{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.robot{
+  display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit;
+  background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+  box-shadow:var(--shadow);padding:16px 18px;
+}
+a.robot:hover{border-color:var(--curve)}
+a.robot:focus-visible{outline:2px solid var(--curve);outline-offset:3px}
+.robot .name{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:20px;line-height:1.2}
+.robot .addr{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;color:var(--muted)}
+.robot .state{font-size:12.5px;font-weight:500;margin-top:6px}
+a.robot .state{color:var(--ok)}
+a.robot .state::after{content:" →";color:var(--curve)}
+.robot.soon{box-shadow:none;background:transparent;border-style:dashed}
+.robot.soon .name{color:var(--muted)}
+.robot.soon .state{color:var(--muted);font-weight:400}
+
+/* Étapes et règles */
+ol.steps{list-style:none;counter-reset:step;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+ol.steps li{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+ol.steps li::before{
+  content:counter(step);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:var(--curve);color:var(--paper);font-size:13px;font-weight:600;margin-top:1px;
+}
+.rules{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.rules li{
+  background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--alpha);
+  border-radius:8px;padding:12px 16px;
+}
+.rules strong{font-weight:600}
+.note{color:var(--muted);font-size:13.5px;margin:12px 0 0}
+a{color:var(--curve)}
+footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow"><a href="../">Moogly Jungle · Enseignement</a></div>
+    <h1>Robot holonome</h1>
+    <p class="intro">Chaque groupe programme son robot depuis un navigateur : JupyterLab tourne sur la Raspberry Pi du robot et commande directement ses moteurs, son lidar et sa caméra.</p>
+  </header>
+
+  <section>
+    <h2>Votre robot</h2>
+    <div class="robots">
+      <a class="robot" href="https://holobot1.tail5610aa.ts.net/" target="_blank" rel="noopener">
+        <span class="name">Robot 1</span>
+        <span class="addr">holobot1.<wbr>tail5610aa.<wbr>ts.net</span>
+        <span class="state">Ouvrir JupyterLab</span>
+      </a>
+      <div class="robot soon">
+        <span class="name">Robot 2</span>
+        <span class="addr">holobot2</span>
+        <span class="state">En préparation</span>
+      </div>
+      <div class="robot soon">
+        <span class="name">Robot 3</span>
+        <span class="addr">holobot3</span>
+        <span class="state">En préparation</span>
+      </div>
+      <div class="robot soon">
+        <span class="name">Robot 4</span>
+        <span class="addr">holobot4</span>
+        <span class="state">En préparation</span>
+      </div>
+      <div class="robot soon">
+        <span class="name">Robot 5</span>
+        <span class="addr">holobot5</span>
+        <span class="state">En préparation</span>
+      </div>
+    </div>
+    <p class="note">Le mot de passe de votre robot vous est donné en séance. Il ne doit pas sortir du groupe.</p>
+  </section>
+
+  <section>
+    <h2>Premiers pas</h2>
+    <ol class="steps">
+      <li><span>Cliquez sur le robot de votre groupe et entrez le mot de passe.</span></li>
+      <li><span>Dans JupyterLab, ouvrez le dossier <code>notebooks</code>, puis le carnet <code>decouverte_robot.ipynb</code>.</span></li>
+      <li><span>Exécutez les cellules une par une avec <kbd>Maj</kbd> + <kbd>Entrée</kbd> : la batterie, le scan du lidar et l'image de la caméra s'affichent sous chaque cellule. Le code tourne sur le robot, pas sur votre ordinateur.</span></li>
+      <li><span>Enregistrez régulièrement avec <kbd>Ctrl</kbd> + <kbd>S</kbd> : vos carnets restent sur le robot de votre groupe.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Règles d'or</h2>
+    <ul class="rules">
+      <li><strong>Un capteur, un programme.</strong> Le lidar, la caméra et les moteurs ne servent qu'à un programme à la fois : fermez ce que vous ouvrez (<code>with</code>, <code>close()</code>), ou redémarrez le noyau (menu <em>Kernel</em>) avant de relancer.</li>
+      <li><strong>Avant de faire rouler le robot</strong>, posez-le sur sa cale ou au sol dans un espace dégagé, avec quelqu'un à côté. Pour tout arrêter : menu <em>Kernel</em> → <em>Interrupt Kernel</em>.</li>
+      <li><strong>La batterie</strong> ne doit jamais descendre sous 10,4 V : surveillez sa tension et faites-la recharger avant d'atteindre ce seuil.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Pour aller plus loin</h2>
+    <p>La bibliothèque du robot, sa documentation et les outils sont sur GitHub : <a href="https://github.com/moogly-jungle/TeachingHolonomousRobot">TeachingHolonomousRobot</a>. Commencez par la documentation du lidar, dans <code>docs/lidar.md</code>.</p>
+  </section>
+
+  <footer>Fait maison. JupyterLab est joint par un tunnel chiffré : le robot n'est relié à aucun autre réseau que le sien.</footer>
+
+</div>
+</body>
+</html>
