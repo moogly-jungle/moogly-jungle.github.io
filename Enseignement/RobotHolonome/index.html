@@ -147,8 +147,8 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <h2>Premiers pas</h2>
     <ol class="steps">
       <li><span>Cliquez sur le robot de votre groupe et entrez le mot de passe.</span></li>
-      <li><span>JupyterLab s'ouvre sur le dossier <code>notebooks</code> : ouvrez le carnet <code>decouverte_robot.ipynb</code> (voir les feuilles Jupyter plus bas).</span></li>
-      <li><span>Exécutez les cellules une par une avec <kbd>Maj</kbd> + <kbd>Entrée</kbd> : la batterie, le scan du lidar et l'image de la caméra s'affichent sous chaque cellule. Le code tourne sur le robot, pas sur votre ordinateur.</span></li>
+      <li><span>JupyterLab s'ouvre sur le dossier <code>notebooks</code> : ouvrez le carnet <code>tableau_de_bord.ipynb</code> (voir les feuilles Jupyter plus bas).</span></li>
+      <li><span>Exécutez une cellule avec <kbd>Maj</kbd> + <kbd>Entrée</kbd> : son résultat (la batterie, l'état des moteurs, le scan du lidar, l'image de la caméra…) s'affiche juste en dessous. Les cellules du tableau de bord sont indépendantes : lancez celles qui vous intéressent, dans l'ordre que vous voulez. Le code tourne sur le robot, pas sur votre ordinateur.</span></li>
       <li><span>Enregistrez régulièrement avec <kbd>Ctrl</kbd> + <kbd>S</kbd> : vos carnets restent sur le robot de votre groupe.</span></li>
     </ol>
   </section>
@@ -157,7 +157,7 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <h2>Règles d'or</h2>
     <ul class="rules">
       <li><strong>Un capteur, un programme.</strong> Le lidar, la caméra et les moteurs ne servent qu'à un programme à la fois, et donc qu'à une seule cellule à la fois : fermez ce que vous ouvrez (<code>with</code>, <code>close()</code>), ou redémarrez le noyau (menu <em>Kernel</em>) avant de relancer.</li>
-      <li><strong>Avant de faire rouler le robot</strong>, posez-le sur une cale, ou bien au sol dans un espace dégagé, avec quelqu'un à côté. Pour tout arrêter : menu <em>Kernel</em> → <em>Interrupt Kernel</em>.</li>
+      <li><strong>Avant de faire rouler le robot</strong>, posez-le sur une cale, ou bien au sol dans un espace dégagé, avec quelqu'un à côté. Pour tout arrêter : menu <em>Kernel</em> → <em>Interrupt Kernel</em> ; pour les curseurs du tableau de bord, leur bouton <em>Arrêt</em>.</li>
       <li><strong>Quand il est sur batterie</strong>, la tension ne doit pas passer en dessous de 10,4&nbsp;V : surveillez-la et faites recharger la batterie avant d'atteindre ce seuil.</li>
     </ul>
   </section>
@@ -166,13 +166,13 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <h2>Feuilles Jupyter</h2>
     <p>Elles sont déjà dans le dossier <code>notebooks</code> de votre robot : ouvrez-les depuis JupyterLab pour les exécuter. Les liens ci-dessous les montrent en lecture seule, sur GitHub.</p>
     <div class="docs">
-      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/decouverte_robot.ipynb">
-        <span class="title">Carnet de découverte</span>
-        <span class="what"><code>decouverte_robot.ipynb</code> : lire la batterie, faire un scan du lidar et prendre une image avec la caméra, sans bouger les roues.</span>
+      <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/tableau_de_bord.ipynb">
+        <span class="title">Tableau de bord</span>
+        <span class="what"><code>tableau_de_bord.ipynb</code> : lire la batterie, surveiller et commander les moteurs à la main (températures, identifiants, curseurs de vitesse et de position), voir le scan du lidar et ses segments de droite, l'image de la caméra et les objets reconnus par YOLO. Chaque cellule est indépendante.</span>
       </a>
       <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/notebooks/decouverte_moteurs.ipynb">
         <span class="title">Découverte des moteurs</span>
-        <span class="what"><code>decouverte_moteurs.ipynb</code> : faire tourner une roue, puis plusieurs, et écrire la fonction qui pilote le robot avec un vecteur vitesse et une rotation, en roues mecanum ou holonomes.</span>
+        <span class="what"><code>decouverte_moteurs.ipynb</code> : faire tourner une roue, puis plusieurs, commander un moteur en position, et écrire la fonction qui pilote le robot avec un vecteur vitesse et une rotation, en roues mecanum ou holonomes.</span>
       </a>
     </div>
     <p class="note">D'autres feuilles viendront au fil du projet.</p>
@@ -186,7 +186,7 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <div class="parts">
       <div class="part">
         <span class="pname">Roues et moteurs</span>
-        <span class="pdesc">4 roues mecanum ou 3 roues holonomes, chacune entraînée par un moteur Dynamixel MX-12W. Les moteurs sont chaînés sur un même câble : on leur donne une vitesse, ils renvoient leur position, leur tension et leur température.</span>
+        <span class="pdesc">4 roues mecanum ou 3 roues holonomes, chacune entraînée par un moteur Dynamixel MX-12W. Les moteurs sont chaînés sur un même câble : on leur donne une vitesse ou une position, ils renvoient leur position, leur tension et leur température.</span>
       </div>
       <div class="part">
         <span class="pname">Raspberry Pi 4</span>
@@ -211,11 +211,11 @@ footer{border-top:1px solid var(--rule);padding-top:16px;color:var(--muted);font
     <div class="docs">
       <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/docs/lidar.md">
         <span class="title">Le lidar</span>
-        <span class="what">Lire un scan, conventions d'angles et de distances, exemples à copier, pièges courants.</span>
+        <span class="what">Lire un scan, conventions d'angles et de distances, segments de droite (murs, meubles), exemples à copier, pièges courants.</span>
       </a>
       <a class="doc" href="https://github.com/moogly-jungle/TeachingHolonomousRobot/blob/main/docs/moteurs.md">
         <span class="title">Les moteurs</span>
-        <span class="what">Trouver les moteurs, faire tourner les roues, chien de garde, et calcul des vitesses des roues pour déplacer le robot dans toutes les directions.</span>
+        <span class="what">Trouver les moteurs, faire tourner les roues, les commander en position, chien de garde, et calcul des vitesses des roues pour déplacer le robot dans toutes les directions.</span>
       </a>
       <div class="doc soon">
         <span class="title">La caméra</span>
